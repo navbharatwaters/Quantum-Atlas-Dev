@@ -2,12 +2,12 @@
 import { motion } from 'framer-motion'
 
 const proofPoints = [
-  { value: '$0.08/min', label: 'Voice AI cost — 10x below market', color: '#00E5A0' },
+  { value: '$0.08/min', label: 'Voice AI cost — 10x below market', color: '#FFBF00' },
   { value: '$0.08/page', label: 'Document processing — 3.5x below Nanonets', color: '#FFBF00' },
-  { value: '4 months', label: 'Voice AI in production — Navbharat Shipping', color: '#00E5A0' },
+  { value: '4 months', label: 'Voice AI in production — Navbharat Shipping', color: '#FFBF00' },
   { value: '1000+', label: 'Corporate clients — existing relationships', color: '#FFBF00' },
-  { value: 'ERP replaced', label: 'Custom-built iKargos platform from scratch', color: '#A855F7' },
-  { value: '15 → 2', label: 'Staff reduction — internal automation proof', color: '#00E5A0' },
+  { value: 'ERP replaced', label: 'Custom-built iKargos platform from scratch', color: '#FFBF00' },
+  { value: '15 → 2', label: 'Staff reduction — internal automation proof', color: '#FFBF00' },
 ]
 
 export function WhyDifferent() {
@@ -27,7 +27,7 @@ export function WhyDifferent() {
       />
       <div className="relative z-10 max-w-7xl mx-auto">
         <motion.p
-          className="text-quantum-green text-[11px] tracking-[3px] uppercase mb-12"
+          className="text-electric-blue text-[11px] tracking-[3px] uppercase mb-12"
           style={{ fontFamily: 'var(--font-mono)' }}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}

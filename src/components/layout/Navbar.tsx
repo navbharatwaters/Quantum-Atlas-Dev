@@ -11,37 +11,37 @@ const services = [
     label: 'AI Voice Agents',
     href: '/services/ai-voice-agents',
     color: 'border-electric-blue',
-    description: 'Self-hosted, Airtel/Jio native — at a fraction of VAPI costs',
+    description: 'Website and phone voice agents on infrastructure you control',
   },
   {
     label: 'Document Intelligence',
     href: '/services/document-intelligence',
-    color: 'border-quantum-green',
-    description: 'Bulk processing in minutes with enterprise-grade accuracy',
+    color: 'border-electric-blue',
+    description: 'Extraction, checking and routing for document-heavy teams',
   },
   {
     label: 'Enterprise RAG',
     href: '/services/enterprise-rag',
-    color: 'border-atlas-purple',
-    description: 'On-premise knowledge systems with citations on every answer',
+    color: 'border-electric-blue',
+    description: 'Knowledge systems with a citation on every answer',
   },
   {
     label: 'Custom SaaS Dev',
     href: '/services/saas-development',
     color: 'border-electric-blue',
-    description: 'Full multi-tenant SaaS from scratch — no vendor lock-in',
+    description: 'Multi-tenant products built end to end',
   },
   {
     label: 'AI Automation',
     href: '/services/ai-automation',
-    color: 'border-quantum-green',
-    description: 'LangGraph + n8n orchestration for enterprise workflows',
+    color: 'border-electric-blue',
+    description: 'Workflows and agents wired into your systems',
   },
   {
     label: 'Content & Video',
     href: '/services/content-video',
-    color: 'border-atlas-purple',
-    description: 'ComfyUI-powered avatars, lipsync, and video production',
+    color: 'border-electric-blue',
+    description: 'Avatar and video production, supporting service',
   },
 ]
 
@@ -95,12 +95,16 @@ export function Navbar() {
   return (
     <>
       <header
-        className={cn(
-          'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-          scrolled
-            ? 'bg-[rgba(12,10,8,0.90)] backdrop-blur-xl border-b border-space-border'
-            : 'bg-transparent'
-        )}
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b"
+        style={scrolled ? {
+          background: 'rgba(12,10,8,0.92)',
+          backdropFilter: 'blur(14px)',
+          WebkitBackdropFilter: 'blur(14px)',
+          borderBottomColor: 'rgba(255,191,0,0.12)',
+        } : {
+          background: 'transparent',
+          borderBottomColor: 'transparent',
+        }}
       >
         <nav className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between h-16">
           {/* Logo */}
@@ -176,7 +180,7 @@ export function Navbar() {
           <div className="flex items-center gap-4">
             <Link
               href="/contact"
-              className="hidden lg:inline-flex items-center px-4 py-2 rounded-lg bg-electric-blue text-white text-sm font-medium hover:bg-electric-blue/90 transition-colors"
+              className="hidden lg:inline-flex items-center px-4 py-2 rounded-lg bg-electric-blue text-space-black text-sm font-medium hover:brightness-110 transition-all"
             >
               Book a Call
             </Link>

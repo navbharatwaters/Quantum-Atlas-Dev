@@ -1,161 +1,126 @@
 'use client'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
-import type { Variants } from 'framer-motion'
 import { Mic2, FileText, Brain, Code2, Workflow, Video } from 'lucide-react'
 
 const services = [
   {
-    icon: Mic2,
+    Icon: Mic2,
     name: 'AI Voice Agents',
-    description: 'Self-hosted inbound and outbound voice agents with Airtel/Jio native integration.',
-    metric: '$0.08/min · 4 months production',
+    description: 'Website and phone voice agents on infrastructure you control. Inbound and outbound, with full observability and no dependency on hosted cloud voice platforms.',
     href: '/services/ai-voice-agents',
-    color: '#FFBF00',
   },
   {
-    icon: FileText,
+    Icon: FileText,
     name: 'Document Intelligence',
-    description: 'Bulk document processing pipeline — hundreds of documents in minutes.',
-    metric: '$0.08/page · 10x faster processing',
+    description: 'Extraction, checking and routing for document-heavy teams. Every extracted field carries a citation back to its source page.',
     href: '/services/document-intelligence',
-    color: '#00E5A0',
   },
   {
-    icon: Brain,
+    Icon: Brain,
     name: 'Enterprise RAG',
-    description: 'Hybrid retrieval knowledge systems with citations on every answer.',
-    metric: 'Government-grade · On-premise ready',
+    description: 'Knowledge systems with a citation on every answer. Hybrid retrieval, row-level security multi-tenancy, and on-premise deployment.',
     href: '/services/enterprise-rag',
-    color: '#A855F7',
   },
   {
-    icon: Code2,
-    name: 'Custom SaaS Development',
-    description: 'Full multi-tenant SaaS platforms built from scratch. No templates.',
-    metric: 'Production-ready · Multi-tenant',
+    Icon: Code2,
+    name: 'Custom AI SaaS',
+    description: 'Multi-tenant products built end to end, from data model to deployment, on open components with no vendor lock-in.',
     href: '/services/saas-development',
-    color: '#FFBF00',
   },
   {
-    icon: Workflow,
+    Icon: Workflow,
     name: 'AI Automation',
-    description: 'LangGraph + n8n orchestration for complex enterprise workflows.',
-    metric: '15-person team reduced to 2 · Proven',
+    description: 'Workflows and agents wired into your systems. Stateful agent graphs, document triggers, and integrations with ERP and accounting tools.',
     href: '/services/ai-automation',
-    color: '#00E5A0',
   },
   {
-    icon: Video,
+    Icon: Video,
     name: 'Content & Video',
-    description: 'ComfyUI-powered avatars, lipsync, and enterprise video production.',
-    metric: 'ComfyUI · Tavus · One vendor',
+    description: 'Avatar and video production, supporting service. Corporate training videos, product demos and marketing content using AI-generated avatars.',
     href: '/services/content-video',
-    color: '#A855F7',
   },
 ]
 
-const container: Variants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.12 } },
-}
-
-const item: Variants = {
-  hidden: { opacity: 0, y: 70, rotate: -1 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    rotate: 0,
-    transition: { duration: 0.7, ease: 'easeOut' as const },
-  },
-}
-
 export function ServicesGrid() {
   return (
-    <section className="relative py-24 px-6 lg:px-8" style={{ background: '#12100D' }}>
-      {/* Grid overlay */}
-      <div
-        className="absolute inset-0 opacity-10"
-        style={{
-          backgroundImage:
-            'linear-gradient(currentcolor 1px, transparent 1px), linear-gradient(90deg, currentcolor 1px, transparent 1px)',
-          backgroundSize: '20px 20px',
-        }}
-      />
-      <div className="relative z-10 max-w-7xl mx-auto">
-      {/* Section header */}
-      <motion.div
-        className="text-center mb-16"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-80px' }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
-      >
-        <p
-          className="text-quantum-green text-[11px] tracking-[3px] uppercase mb-4"
-          style={{ fontFamily: 'var(--font-mono)' }}
-        >
-          Our Services
-        </p>
-        <h2
-          className="text-4xl font-bold text-text-primary mb-4"
-          style={{ fontFamily: 'var(--font-display)' }}
-        >
-          The full stack. Under one roof.
-        </h2>
-        <p className="text-text-secondary text-base max-w-xl mx-auto leading-relaxed">
-          One partner for voice AI, document intelligence, RAG systems, and custom SaaS —
-          so you never need a second vendor.
-        </p>
-      </motion.div>
+    <section
+      className="py-[88px] px-6 lg:px-8"
+      style={{ background: '#0C0A08' }}
+      aria-labelledby="svc-h"
+    >
+      <div className="max-w-[1200px] mx-auto">
+        {/* Header */}
+        <div className="flex flex-col gap-2.5 mb-11">
+          <span
+            className="text-electric-blue uppercase tracking-[0.14em] text-[0.68rem]"
+            style={{ fontFamily: 'var(--font-mono)' }}
+          >
+            What We Build
+          </span>
+          <h2
+            id="svc-h"
+            className="text-[clamp(1.6rem,3vw,2.2rem)] font-semibold text-text-primary leading-tight tracking-[-0.015em]"
+            style={{ fontFamily: 'var(--font-display)' }}
+          >
+            Six capabilities. One team.
+          </h2>
+          <p className="text-[0.9rem] text-text-secondary max-w-[500px] leading-[1.65] mt-1">
+            We build and run these in our own operations before offering them to clients. Content &amp; Video is a supporting service.
+          </p>
+        </div>
 
-      {/* Grid */}
-      <motion.div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-        variants={container}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-100px' }}
-      >
-        {services.map((svc) => {
-          const Icon = svc.icon
-          return (
-            <motion.div key={svc.href} variants={item}>
+        {/* Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[14px]">
+          {services.map((svc) => {
+            const { Icon } = svc
+            return (
               <Link
+                key={svc.href}
                 href={svc.href}
-                className="group flex flex-col h-full p-6 rounded-xl border border-space-border hover:-translate-y-1 hover:border-opacity-80 transition-all duration-300"
+                className="group flex flex-col gap-[13px] p-[26px_22px] rounded-xl border border-space-border bg-space-card transition-all duration-200 hover:border-border-hi focus-visible:outline-2 focus-visible:outline-electric-blue focus-visible:outline-offset-2"
                 style={{
-                  background: '#171411',
-                  borderTop: `3px solid ${svc.color}`,
+                  ['--tw-bg-opacity' as string]: '1',
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLAnchorElement
+                  el.style.background = 'linear-gradient(135deg, rgba(255,191,0,0.05) 0%, #171411 60%)'
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLAnchorElement
+                  el.style.background = ''
                 }}
               >
-                <div className="flex items-center gap-3 mb-4">
-                  <Icon size={22} style={{ color: svc.color }} />
-                  <h3
-                    className="text-text-primary font-semibold text-[15px]"
-                    style={{ fontFamily: 'var(--font-display)' }}
-                  >
-                    {svc.name}
-                  </h3>
+                {/* Icon container */}
+                <div
+                  className="w-10 h-10 grid place-items-center rounded-lg border shrink-0"
+                  style={{
+                    background: 'rgba(255,191,0,0.10)',
+                    borderColor: 'rgba(255,191,0,0.14)',
+                  }}
+                  aria-hidden="true"
+                >
+                  <Icon size={20} className="text-electric-blue" strokeWidth={1.5} />
                 </div>
-                <div className="w-full h-px bg-space-border mb-4" />
-                <p className="text-text-secondary text-sm leading-relaxed flex-1 mb-4">
+
+                <h3
+                  className="text-[1.05rem] font-semibold text-text-primary"
+                  style={{ fontFamily: 'var(--font-display)' }}
+                >
+                  {svc.name}
+                </h3>
+
+                <p className="text-[0.85rem] text-text-secondary leading-[1.65] flex-1">
                   {svc.description}
                 </p>
-                <p
-                  className="text-[12px] mb-4"
-                  style={{ color: svc.color, fontFamily: 'var(--font-mono)' }}
-                >
-                  {svc.metric}
-                </p>
-                <span className="text-sm text-text-secondary group-hover:text-electric-blue transition-colors">
-                  Learn more →
+
+                <span className="mt-1 inline-flex items-center gap-1.5 text-[0.85rem] font-medium text-electric-blue">
+                  Learn more
+                  <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-1">→</span>
                 </span>
               </Link>
-            </motion.div>
-          )
-        })}
-      </motion.div>
+            )
+          })}
+        </div>
       </div>
     </section>
   )

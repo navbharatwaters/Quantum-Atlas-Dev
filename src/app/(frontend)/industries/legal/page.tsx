@@ -19,9 +19,9 @@ const data: IndustryPageData = {
     { title: 'Cross-contract analysis', body: 'Understanding how obligations interact across a portfolio of 500 contracts requires capabilities that no human team has at reasonable cost.' },
   ],
   services: [
-    { name: 'Document Intelligence', href: '/services/document-intelligence', color: '#00E5A0', relevance: 'Contract clause extraction, obligation identification, risk flagging, deadline tracking' },
-    { name: 'Enterprise RAG', href: '/services/enterprise-rag', color: '#A855F7', relevance: 'Q&A across contract corpus — find precedents, identify risks, query obligations' },
-    { name: 'AI Automation', href: '/services/ai-automation', color: '#00E5A0', relevance: 'Deadline notification workflows, approval routing, document management' },
+    { name: 'Document Intelligence', href: '/services/document-intelligence', color: '#FFBF00', relevance: 'Contract clause extraction, obligation identification, risk flagging, deadline tracking' },
+    { name: 'Enterprise RAG', href: '/services/enterprise-rag', color: '#FFBF00', relevance: 'Q&A across contract corpus — find precedents, identify risks, query obligations' },
+    { name: 'AI Automation', href: '/services/ai-automation', color: '#FFBF00', relevance: 'Deadline notification workflows, approval routing, document management' },
   ],
   compliance: [
     { title: 'Attorney-Client Privilege', body: 'On-premise deployment ensures client documents never leave your network. No third-party access to privileged information.' },

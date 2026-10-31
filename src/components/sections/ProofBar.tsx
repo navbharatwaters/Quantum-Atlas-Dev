@@ -25,7 +25,7 @@ export function ProofBar() {
       >
         {items.map((point, i) => (
           <span key={i} className="flex items-center gap-3 shrink-0">
-            <span className="text-quantum-green text-sm">◆</span>
+            <span className="text-electric-blue text-sm">◆</span>
             <span
               className="text-text-secondary text-[12px] tracking-wide"
               style={{ fontFamily: 'var(--font-mono)' }}

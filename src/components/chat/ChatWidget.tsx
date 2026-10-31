@@ -3,6 +3,9 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Send, MessageSquare, Loader2, Mic, MicOff, PhoneOff } from 'lucide-react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import remarkBreaks from 'remark-breaks'
 import {
   Room,
   RoomEvent,
@@ -21,7 +24,7 @@ interface Message {
 
 const GREETING: Message = {
   role: 'assistant',
-  text: "Hi — I'm the Quantum Atlas assistant. I can answer questions about our AI services, pricing, and how we've deployed systems in production. What are you working on?",
+  text: "Hi — I'm the Quantum Atlas assistant. I can answer questions about our AI services and how we've deployed systems in production. What are you working on?",
 }
 
 type ChatMode = 'text' | 'voice'
@@ -33,7 +36,6 @@ export function ChatWidget() {
   const [messages, setMessages] = useState<Message[]>([GREETING])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
-  const [threadId, setThreadId] = useState<string | null>(null)
   const [voiceStatus, setVoiceStatus] = useState<VoiceStatus>('idle')
   const [agentSpeaking, setAgentSpeaking] = useState(false)
   const [micMuted, setMicMuted] = useState(false)
@@ -41,9 +43,11 @@ export function ChatWidget() {
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const roomRef = useRef<Room | null>(null)
 
+  // Hero "Talk to our voice agent" button dispatches this event
   useEffect(() => {
-    const saved = sessionStorage.getItem('qa_thread')
-    if (saved) setThreadId(saved)
+    function handleOpenVoice() { setOpen(true) }
+    window.addEventListener('qa:open-voice', handleOpenVoice)
+    return () => window.removeEventListener('qa:open-voice', handleOpenVoice)
   }, [])
 
   useEffect(() => {
@@ -63,25 +67,47 @@ export function ChatWidget() {
     const text = input.trim()
     if (!text || loading) return
     setInput('')
-    setMessages((prev) => [...prev, { role: 'user', text }])
+    const nextMessages: Message[] = [...messages, { role: 'user', text }]
+    setMessages(nextMessages)
     setLoading(true)
     try {
+      // Build history from all messages before the one we just added (last 6)
+      const history = nextMessages
+        .slice(0, -1)
+        .filter((m) => m.role === 'user' || m.role === 'assistant')
+        .slice(-6)
+        .map((m) => ({ role: m.role, text: m.text }))
+
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, threadId }),
+        body: JSON.stringify({ message: text, history }),
       })
       const data = await res.json()
-      if (data.threadId) {
-        setThreadId(data.threadId)
-        sessionStorage.setItem('qa_thread', data.threadId)
+      if (!res.ok) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: 'assistant',
+            text:
+              data.error ||
+              'Something went wrong. Please try again or email contact@quantumatlas.dev.',
+          },
+        ])
+        return
       }
       setMessages((prev) => [
         ...prev,
-        { role: 'assistant', text: data.reply ?? 'Sorry, something went wrong. Please try again.' },
+        {
+          role: 'assistant',
+          text: data.reply ?? 'Sorry, something went wrong. Please try again.',
+        },
       ])
     } catch {
-      setMessages((prev) => [...prev, { role: 'assistant', text: 'Connection error. Please try again.' }])
+      setMessages((prev) => [
+        ...prev,
+        { role: 'assistant', text: 'Connection error. Please try again.' },
+      ])
     } finally {
       setLoading(false)
     }
@@ -225,7 +251,7 @@ export function ChatWidget() {
                   {messages.map((msg, i) => (
                     <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                       <div
-                        className={`max-w-[85%] px-3.5 py-2.5 rounded-xl text-sm leading-relaxed whitespace-pre-wrap ${
+                        className={`max-w-[85%] px-3.5 py-2.5 rounded-xl text-sm leading-relaxed ${
                           msg.role === 'user'
                             ? 'text-space-black rounded-br-sm'
                             : 'text-text-primary rounded-bl-sm border border-space-border'
@@ -235,7 +261,36 @@ export function ChatWidget() {
                           background: msg.role === 'user' ? '#FFBF00' : '#0C0A08',
                         }}
                       >
-                        {msg.text}
+                        {msg.role === 'user' ? (
+                          <span className="whitespace-pre-wrap">{msg.text}</span>
+                        ) : (
+                          <div className="prose prose-sm prose-invert max-w-none [&_p]:mb-2 [&_p:last-child]:mb-0 [&_ul]:mb-2 [&_ol]:mb-2 [&_li]:mb-0.5 [&_table]:text-xs [&_th]:text-text-primary [&_td]:text-text-secondary">
+                            <ReactMarkdown
+                              remarkPlugins={[remarkGfm, remarkBreaks]}
+                              components={{
+                                a: ({ href, children }) => (
+                                  <a
+                                    href={href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-amber-400 underline hover:text-amber-300"
+                                  >
+                                    {children}
+                                  </a>
+                                ),
+                                table: ({ children }) => (
+                                  <div className="overflow-x-auto">
+                                    <table>{children}</table>
+                                  </div>
+                                ),
+                                // Disable raw HTML passthrough
+                                html: () => null,
+                              }}
+                            >
+                              {msg.text}
+                            </ReactMarkdown>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -278,7 +333,13 @@ export function ChatWidget() {
                     </button>
                   </div>
                   <p className="text-text-secondary/40 text-[10px] mt-2 text-center" style={{ fontFamily: 'var(--font-mono)' }}>
-                    Enter to send · Shift+Enter for new line · <button onClick={() => { setMode('voice'); connectVoice() }} className="underline hover:text-text-secondary/60">Switch to voice</button>
+                    Enter to send · Shift+Enter for new line ·{' '}
+                    <button
+                      onClick={() => { setMode('voice'); connectVoice() }}
+                      className="underline hover:text-text-secondary/60"
+                    >
+                      Switch to voice
+                    </button>
                   </p>
                 </div>
               </>
@@ -378,17 +439,10 @@ export function ChatWidget() {
         whileTap={{ scale: 0.95 }}
         aria-label="Open chat"
       >
-        <AnimatePresence mode="wait">
-          {open ? (
-            <motion.div key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}>
-              <X size={22} className="text-space-black" />
-            </motion.div>
-          ) : (
-            <motion.div key="chat" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>
-              <MessageSquare size={22} className="text-space-black" />
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {open
+          ? <X size={22} style={{ color: '#0C0A08' }} />
+          : <MessageSquare size={22} style={{ color: '#0C0A08' }} />
+        }
       </motion.button>
     </>
   )

@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 const data: ServicePageData = {
   slug: 'content-video',
   name: 'AI Content & Video',
-  color: '#A855F7',
-  colorName: 'atlas-purple',
+  color: '#FFBF00',
+  colorName: 'electric-blue',
   tagline: 'Enterprise video at scale, without a studio.',
   heroMetrics: [
     { value: 'ComfyUI', label: 'Production pipeline' },
@@ -85,7 +85,7 @@ const data: ServicePageData = {
   ],
   relatedServices: [
     { name: 'AI Voice Agents', href: '/services/ai-voice-agents', color: '#FFBF00' },
-    { name: 'AI Automation', href: '/services/ai-automation', color: '#00E5A0' },
+    { name: 'AI Automation', href: '/services/ai-automation', color: '#FFBF00' },
     { name: 'Custom SaaS Dev', href: '/services/saas-development', color: '#FFBF00' },
   ],
 }

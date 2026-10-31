@@ -19,9 +19,9 @@ const data: IndustryPageData = {
     { title: 'Compliance documentation', body: 'NABH accreditation, PCPNDT compliance, drug trial documentation — regulatory document management is a persistent operational burden.' },
   ],
   services: [
-    { name: 'Document Intelligence', href: '/services/document-intelligence', color: '#00E5A0', relevance: 'Patient records, clinical docs, insurance documents — structured extraction' },
-    { name: 'Enterprise RAG', href: '/services/enterprise-rag', color: '#A855F7', relevance: 'Clinical knowledge base, drug interaction lookup, protocol search' },
-    { name: 'AI Automation', href: '/services/ai-automation', color: '#00E5A0', relevance: 'Pre-auth workflow, document routing, follow-up automation' },
+    { name: 'Document Intelligence', href: '/services/document-intelligence', color: '#FFBF00', relevance: 'Patient records, clinical docs, insurance documents — structured extraction' },
+    { name: 'Enterprise RAG', href: '/services/enterprise-rag', color: '#FFBF00', relevance: 'Clinical knowledge base, drug interaction lookup, protocol search' },
+    { name: 'AI Automation', href: '/services/ai-automation', color: '#FFBF00', relevance: 'Pre-auth workflow, document routing, follow-up automation' },
   ],
   compliance: [
     { title: 'Patient Data Privacy', body: 'On-premise deployment ensures patient data never leaves the hospital network. DPDP Act compliance by architecture.' },

@@ -45,8 +45,8 @@ function WhitepaperGate() {
   if (submitted) {
     return (
       <div className="flex flex-col items-center justify-center h-full gap-4 text-center py-8">
-        <div className="w-12 h-12 rounded-full bg-quantum-green/10 flex items-center justify-center">
-          <span className="text-quantum-green text-2xl">&#10003;</span>
+        <div className="w-12 h-12 rounded-full bg-electric-blue/10 flex items-center justify-center">
+          <span className="text-electric-blue text-2xl">&#10003;</span>
         </div>
         <p className="text-text-primary font-semibold">Guide sent to your inbox</p>
         <p className="text-text-secondary text-sm">Check your email for the RAG Architecture Guide.</p>
@@ -105,7 +105,7 @@ export function KnowledgePreview() {
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.8, ease: 'easeOut' }}
         >
-          <p className="text-quantum-green text-[11px] tracking-[3px] uppercase mb-4" style={{ fontFamily: 'var(--font-mono)' }}>
+          <p className="text-electric-blue text-[11px] tracking-[3px] uppercase mb-4" style={{ fontFamily: 'var(--font-mono)' }}>
             Knowledge Hub
           </p>
           <h2 className="text-4xl font-bold text-text-primary" style={{ fontFamily: 'var(--font-display)' }}>
@@ -160,14 +160,14 @@ export function KnowledgePreview() {
           {/* Whitepaper gate — right column */}
           <motion.div
             className="rounded-xl border border-space-border p-6"
-            style={{ background: '#171411', borderTop: '3px solid #A855F7' }}
+            style={{ background: '#171411', borderTop: '1px solid #2E261F' }}
             initial={{ opacity: 0, x: 80, y: 30 }}
             whileInView={{ opacity: 1, x: 0, y: 0 }}
             viewport={{ once: true, margin: '-80px' }}
             transition={{ duration: 0.85, ease: 'easeOut', delay: 0.1 }}
           >
             <p
-              className="text-atlas-purple text-[10px] tracking-[2px] uppercase mb-3"
+              className="text-electric-blue text-[10px] tracking-[2px] uppercase mb-3"
               style={{ fontFamily: 'var(--font-mono)' }}
             >
               Free Guide

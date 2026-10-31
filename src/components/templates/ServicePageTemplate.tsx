@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import Script from 'next/script'
 import { motion } from 'framer-motion'
+import { ContentCard } from '@/components/shared/ContentCard'
 import {
   Accordion,
   AccordionContent,
@@ -13,7 +14,7 @@ export interface ServicePageData {
   slug: string
   name: string
   color: string // hex
-  colorName: string // for css class: 'electric-blue' | 'quantum-green' | 'atlas-purple'
+  colorName: string // for css class: 'electric-blue' | 'electric-blue' | 'electric-blue'
   tagline: string
   heroMetrics: { value: string; label: string }[]
   problemHeading: string
@@ -75,7 +76,7 @@ export function ServicePageTemplate({ data }: { data: ServicePageData }) {
       {/* S1: Hero */}
       <section
         className="pt-32 pb-24 px-6 lg:px-8"
-        style={{ background: '#05080F', borderBottom: `3px solid ${data.color}` }}
+        style={{ background: '#0C0A08', borderBottom: '1px solid #2E261F' }}
       >
         <div className="max-w-4xl mx-auto">
           <motion.div {...fadeUp()}>
@@ -86,8 +87,8 @@ export function ServicePageTemplate({ data }: { data: ServicePageData }) {
               {data.name}
             </p>
             <h1
-              className="text-5xl font-bold text-text-primary leading-[1.1] mb-6"
-              style={{ fontFamily: 'var(--font-display)' }}
+              className="font-bold text-text-primary leading-[1.1] mb-6"
+              style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 2.5rem)' }}
             >
               {data.tagline}
             </h1>
@@ -116,7 +117,7 @@ export function ServicePageTemplate({ data }: { data: ServicePageData }) {
       </section>
 
       {/* S2: The Problem */}
-      <section className="py-20 px-6 lg:px-8" style={{ background: '#0D1117' }}>
+      <section className="py-20 px-6 lg:px-8" style={{ background: '#12100D' }}>
         <div className="max-w-4xl mx-auto">
           <motion.div {...fadeUp()}>
             <p
@@ -137,7 +138,7 @@ export function ServicePageTemplate({ data }: { data: ServicePageData }) {
       </section>
 
       {/* S3: Our Approach */}
-      <section className="py-20 px-6 lg:px-8" style={{ background: '#0D1117' }}>
+      <section className="py-20 px-6 lg:px-8" style={{ background: '#12100D' }}>
         <div className="max-w-4xl mx-auto">
           <motion.div {...fadeUp()}>
             <p
@@ -165,7 +166,7 @@ export function ServicePageTemplate({ data }: { data: ServicePageData }) {
       </section>
 
       {/* S4: Proof */}
-      <section className="py-20 px-6 lg:px-8" style={{ background: '#05080F' }}>
+      <section className="py-20 px-6 lg:px-8" style={{ background: '#0C0A08' }}>
         <div className="max-w-4xl mx-auto">
           <motion.div {...fadeUp()}>
             <p
@@ -177,7 +178,7 @@ export function ServicePageTemplate({ data }: { data: ServicePageData }) {
             <div className="border border-space-border rounded-xl overflow-hidden">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-space-border" style={{ background: '#13192A' }}>
+                  <tr className="border-b border-space-border" style={{ background: '#171411' }}>
                     <th className="text-left p-4 text-text-secondary font-medium">Metric</th>
                     <th className="text-left p-4 text-text-secondary font-medium">Before</th>
                     <th className="text-left p-4 font-medium" style={{ color: data.color }}>After</th>
@@ -199,7 +200,7 @@ export function ServicePageTemplate({ data }: { data: ServicePageData }) {
       </section>
 
       {/* S5: Technical Specs */}
-      <section className="py-20 px-6 lg:px-8" style={{ background: '#0D1117' }}>
+      <section className="py-20 px-6 lg:px-8" style={{ background: '#12100D' }}>
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
           <motion.div {...fadeUp()}>
             <p
@@ -239,7 +240,7 @@ export function ServicePageTemplate({ data }: { data: ServicePageData }) {
       </section>
 
       {/* S6: Pricing Approach (light section) */}
-      <section className="py-20 px-6 lg:px-8" style={{ background: '#F0F4FF' }}>
+      <section className="py-20 px-6 lg:px-8" style={{ background: '#FAF7F5' }}>
         <div className="max-w-4xl mx-auto text-center">
           <motion.div {...fadeUp()}>
             <p
@@ -263,7 +264,7 @@ export function ServicePageTemplate({ data }: { data: ServicePageData }) {
       </section>
 
       {/* S7: FAQ */}
-      <section className="py-20 px-6 lg:px-8" style={{ background: '#0D1117' }}>
+      <section className="py-20 px-6 lg:px-8" style={{ background: '#12100D' }}>
         <div className="max-w-3xl mx-auto">
           <motion.div {...fadeUp()}>
             <p
@@ -278,7 +279,7 @@ export function ServicePageTemplate({ data }: { data: ServicePageData }) {
                   key={i}
                   value={`faq-${i}`}
                   className="border border-space-border rounded-lg px-4"
-                  style={{ background: '#13192A' }}
+                  style={{ background: '#171411' }}
                 >
                   <AccordionTrigger
                     className="text-text-primary text-left font-medium py-4 hover:no-underline"
@@ -297,7 +298,7 @@ export function ServicePageTemplate({ data }: { data: ServicePageData }) {
       </section>
 
       {/* S8: Related Services */}
-      <section className="py-20 px-6 lg:px-8" style={{ background: '#05080F' }}>
+      <section className="py-20 px-6 lg:px-8" style={{ background: '#0C0A08' }}>
         <div className="max-w-4xl mx-auto">
           <motion.div {...fadeUp()}>
             <p
@@ -306,21 +307,13 @@ export function ServicePageTemplate({ data }: { data: ServicePageData }) {
             >
               Related Services
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {data.relatedServices.map((svc) => (
-                <Link
+                <ContentCard
                   key={svc.href}
                   href={svc.href}
-                  className="p-5 rounded-xl border border-space-border hover:border-opacity-80 transition-all group"
-                  style={{ background: '#13192A', borderTop: `3px solid ${svc.color}` }}
-                >
-                  <span
-                    className="text-text-primary group-hover:text-electric-blue font-medium text-sm transition-colors"
-                    style={{ fontFamily: 'var(--font-display)' }}
-                  >
-                    {svc.name} →
-                  </span>
-                </Link>
+                  title={svc.name}
+                />
               ))}
             </div>
           </motion.div>
@@ -328,7 +321,7 @@ export function ServicePageTemplate({ data }: { data: ServicePageData }) {
       </section>
 
       {/* Final CTA */}
-      <section className="py-24 px-6 lg:px-8 text-center" style={{ background: '#05080F' }}>
+      <section className="py-24 px-6 lg:px-8 text-center" style={{ background: '#0C0A08' }}>
         <div className="max-w-2xl mx-auto">
           <motion.div {...fadeUp()}>
             <h2

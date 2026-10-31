@@ -11,10 +11,9 @@ gsap.registerPlugin()
 export function Hero() {
   const heroRef = useRef<HTMLElement>(null)
   const eyebrowRef = useRef<HTMLDivElement>(null)
-  const headlineRef = useRef<HTMLDivElement>(null)
+  const headlineRef = useRef<HTMLHeadingElement>(null)
   const subtitleRef = useRef<HTMLParagraphElement>(null)
   const ctasRef = useRef<HTMLDivElement>(null)
-  const statsRef = useRef<HTMLDivElement>(null)
 
   useGSAP(
     () => {
@@ -33,9 +32,7 @@ export function Hero() {
           { y: 20, opacity: 0 },
           { y: 0, opacity: 1, duration: 0.5, stagger: 0.1 },
           '-=0.3',
-        )
-        .fromTo(statsRef.current, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 }, '-=0.2')
-    },
+        )    },
     { scope: heroRef },
   )
 
@@ -61,11 +58,11 @@ export function Hero() {
         {/* Eyebrow */}
         <div ref={eyebrowRef} className="flex items-center gap-2 mb-6" style={{ opacity: 0 }}>
           <span
-            className="w-[6px] h-[6px] rounded-full bg-quantum-green shrink-0"
+            className="w-[6px] h-[6px] rounded-full bg-electric-blue shrink-0"
             style={{ animation: 'pulse-dot 2s ease-in-out infinite' }}
           />
           <span
-            className="text-quantum-green uppercase tracking-[3px] text-[11px]"
+            className="text-electric-blue uppercase tracking-[3px] text-[11px]"
             style={{ fontFamily: 'var(--font-mono)' }}
           >
             Quantum Atlas · AI Infrastructure
@@ -73,7 +70,7 @@ export function Hero() {
         </div>
 
         {/* Headline */}
-        <div ref={headlineRef} className="mb-6">
+        <h1 ref={headlineRef} className="mb-6 font-normal">
           <span
             className="block text-[44px] font-bold leading-[1.08] text-text-primary"
             style={{ fontFamily: 'var(--font-display)', opacity: 0 }}
@@ -92,7 +89,7 @@ export function Hero() {
           >
             Proven at Scale.
           </span>
-        </div>
+        </h1>
 
         {/* Subheadline */}
         <p
@@ -124,13 +121,6 @@ export function Hero() {
           </Link>
         </div>
 
-        {/* Stats row */}
-        <div ref={statsRef} className="flex items-center" style={{ opacity: 0 }}>
-          <StatItem value="$0.08" label="Per page · IDP" color="quantum-green" showDivider={false} />
-          <StatItem value="4 mo" label="Voice · Live" color="electric-blue" />
-          <StatItem value="1000+" label="Corporate clients" color="text-primary" />
-          <StatItem value="Govt" label="Govt · RAG · Active" color="electric-blue" />
-        </div>
       </div>
 
       {/* Globe — right side */}
@@ -157,38 +147,5 @@ export function Hero() {
         18.9667° N · 72.8333° E · MUMBAI
       </div>
     </section>
-  )
-}
-
-// ─── Stat Item ────────────────────────────────────────────────────────────────
-
-interface StatItemProps {
-  value: string
-  label: string
-  color: string
-  showDivider?: boolean
-}
-
-function StatItem({ value, label, color, showDivider = true }: StatItemProps) {
-  return (
-    <div className="flex items-stretch gap-0">
-      {showDivider && (
-        <div className="w-px bg-space-border mx-4 self-stretch min-h-[36px]" />
-      )}
-      <div className="flex flex-col">
-        <span
-          className={`text-[18px] font-bold text-${color}`}
-          style={{ fontFamily: 'var(--font-mono)' }}
-        >
-          {value}
-        </span>
-        <span
-          className="text-[10px] text-text-secondary whitespace-nowrap"
-          style={{ fontFamily: 'var(--font-body)' }}
-        >
-          {label}
-        </span>
-      </div>
-    </div>
   )
 }

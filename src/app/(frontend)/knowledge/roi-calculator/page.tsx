@@ -9,12 +9,12 @@ export const metadata: Metadata = {
 export default function ROICalculatorPage() {
   return (
     <div className="bg-space-dark min-h-screen">
-      <section className="pt-32 pb-8 px-6 lg:px-8" style={{ background: '#05080F' }}>
+      <section className="pt-32 pb-8 px-6 lg:px-8" style={{ background: '#0C0A08' }}>
         <div className="max-w-5xl mx-auto">
-          <p className="text-quantum-green text-[11px] tracking-[3px] uppercase mb-4" style={{ fontFamily: 'var(--font-mono)' }}>
+          <p className="text-electric-blue text-[11px] tracking-[3px] uppercase mb-4" style={{ fontFamily: 'var(--font-mono)' }}>
             ROI Calculator
           </p>
-          <h1 className="text-4xl font-bold text-text-primary mb-4" style={{ fontFamily: 'var(--font-display)' }}>
+          <h1 className="font-bold text-text-primary mb-4" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 2.5rem)' }}>
             What could you save?
           </h1>
           <p className="text-text-secondary text-lg">

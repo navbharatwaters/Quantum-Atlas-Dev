@@ -7,14 +7,14 @@ const engagements = [
     service: 'Enterprise RAG',
     status: 'Active Implementation',
     outcome: '40+ senior government officers evaluating for large-scale IGST deployment',
-    color: '#A855F7',
+    color: '#FFBF00',
   },
   {
     sector: 'Global Logistics · Fortune 500',
     service: 'Document Intelligence',
     status: 'Production Testing Complete',
     outcome: 'Bulk document processing at enterprise scale — evaluated and approved',
-    color: '#00E5A0',
+    color: '#FFBF00',
   },
   {
     sector: 'Shipping & Logistics',
@@ -45,7 +45,7 @@ export function ActiveEngagements() {
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.8, ease: 'easeOut' }}
         >
-          <p className="text-quantum-green text-[11px] tracking-[3px] uppercase mb-4" style={{ fontFamily: 'var(--font-mono)' }}>
+          <p className="text-electric-blue text-[11px] tracking-[3px] uppercase mb-4" style={{ fontFamily: 'var(--font-mono)' }}>
             Active Engagements
           </p>
           <h2 className="text-4xl font-bold text-text-primary" style={{ fontFamily: 'var(--font-display)' }}>
@@ -58,7 +58,7 @@ export function ActiveEngagements() {
             <motion.div
               key={i}
               className="rounded-xl border border-space-border p-6"
-              style={{ background: '#171411', borderTop: `3px solid ${eng.color}` }}
+              style={{ background: '#171411', borderTop: '1px solid #2E261F' }}
               initial={{ opacity: 0, y: 70, rotate: 1 }}
               whileInView={{ opacity: 1, y: 0, rotate: 0 }}
               viewport={{ once: true, margin: '-80px' }}
@@ -67,7 +67,7 @@ export function ActiveEngagements() {
               <div className="flex items-center gap-2 mb-4">
                 <span
                   className="px-2 py-0.5 rounded-full text-[10px] font-medium"
-                  style={{ background: '#00E5A015', color: '#00E5A0', fontFamily: 'var(--font-mono)' }}
+                  style={{ background: '#FFBF0015', color: '#FFBF00', fontFamily: 'var(--font-mono)' }}
                 >
                   {eng.status}
                 </span>

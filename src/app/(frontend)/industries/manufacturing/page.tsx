@@ -19,9 +19,9 @@ const data: IndustryPageData = {
     { title: 'Multi-system fragmentation', body: 'ERP, warehouse management, and procurement systems do not share data automatically. Manual re-entry at each system boundary introduces errors and delays.' },
   ],
   services: [
-    { name: 'Document Intelligence', href: '/services/document-intelligence', color: '#00E5A0', relevance: 'PO extraction, quality cert processing, import/export document handling' },
-    { name: 'AI Automation', href: '/services/ai-automation', color: '#00E5A0', relevance: 'ERP integration, approval routing, exception handling for document mismatches' },
-    { name: 'Enterprise RAG', href: '/services/enterprise-rag', color: '#A855F7', relevance: 'Internal knowledge base — specs, compliance requirements, supplier documentation' },
+    { name: 'Document Intelligence', href: '/services/document-intelligence', color: '#FFBF00', relevance: 'PO extraction, quality cert processing, import/export document handling' },
+    { name: 'AI Automation', href: '/services/ai-automation', color: '#FFBF00', relevance: 'ERP integration, approval routing, exception handling for document mismatches' },
+    { name: 'Enterprise RAG', href: '/services/enterprise-rag', color: '#FFBF00', relevance: 'Internal knowledge base — specs, compliance requirements, supplier documentation' },
   ],
   compliance: [
     { title: 'BIS/ISO Compliance', body: 'Compliance documentation management — standards certificates, test reports, and product certification documents indexed and searchable.' },

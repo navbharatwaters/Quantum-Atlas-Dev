@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 const data: ServicePageData = {
   slug: 'enterprise-rag',
   name: 'Enterprise RAG',
-  color: '#A855F7',
-  colorName: 'atlas-purple',
+  color: '#FFBF00',
+  colorName: 'electric-blue',
   tagline: 'Knowledge systems governments trust',
   heroMetrics: [
     { value: 'On-premise', label: 'Deployment option' },
@@ -82,9 +82,9 @@ const data: ServicePageData = {
     },
   ],
   relatedServices: [
-    { name: 'Document Intelligence', href: '/services/document-intelligence', color: '#00E5A0' },
+    { name: 'Document Intelligence', href: '/services/document-intelligence', color: '#FFBF00' },
     { name: 'Custom SaaS Dev', href: '/services/saas-development', color: '#FFBF00' },
-    { name: 'AI Automation', href: '/services/ai-automation', color: '#00E5A0' },
+    { name: 'AI Automation', href: '/services/ai-automation', color: '#FFBF00' },
   ],
 }
 

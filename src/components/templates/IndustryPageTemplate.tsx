@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import Script from 'next/script'
+import { ContentCard } from '@/components/shared/ContentCard'
 
 export interface IndustryPageData {
   id: string
@@ -38,17 +39,17 @@ export function IndustryPageTemplate({ data }: { data: IndustryPageData }) {
       />
 
       {/* Hero */}
-      <section className="pt-32 pb-24 px-6 lg:px-8" style={{ background: '#05080F' }}>
+      <section className="pt-32 pb-24 px-6 lg:px-8" style={{ background: '#0C0A08' }}>
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
-            <p className="text-quantum-green text-[11px] tracking-[3px] uppercase mb-4" style={{ fontFamily: 'var(--font-mono)' }}>
+            <p className="text-electric-blue text-[11px] tracking-[3px] uppercase mb-4" style={{ fontFamily: 'var(--font-mono)' }}>
               {data.name}
             </p>
-            <h1 className="text-5xl font-bold text-text-primary leading-[1.1] mb-6" style={{ fontFamily: 'var(--font-display)' }}>
+            <h1 className="font-bold text-text-primary leading-[1.1] mb-6" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 2.5rem)' }}>
               {data.heroHeadline}
             </h1>
             <p className="text-text-secondary text-xl leading-relaxed max-w-2xl">{data.heroSubtext}</p>
@@ -57,7 +58,7 @@ export function IndustryPageTemplate({ data }: { data: IndustryPageData }) {
       </section>
 
       {/* Challenges */}
-      <section className="py-20 px-6 lg:px-8" style={{ background: '#0D1117' }}>
+      <section className="py-20 px-6 lg:px-8" style={{ background: '#12100D' }}>
         <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -70,7 +71,7 @@ export function IndustryPageTemplate({ data }: { data: IndustryPageData }) {
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {data.challenges.map((c, i) => (
-                <div key={i} className="p-6 rounded-xl border border-space-border" style={{ background: '#13192A' }}>
+                <div key={i} className="p-6 rounded-xl border border-space-border" style={{ background: '#171411' }}>
                   <h3 className="text-text-primary font-semibold mb-2" style={{ fontFamily: 'var(--font-display)' }}>
                     {c.title}
                   </h3>
@@ -83,7 +84,7 @@ export function IndustryPageTemplate({ data }: { data: IndustryPageData }) {
       </section>
 
       {/* Services for this industry */}
-      <section className="py-20 px-6 lg:px-8" style={{ background: '#05080F' }}>
+      <section className="py-20 px-6 lg:px-8" style={{ background: '#0C0A08' }}>
         <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -94,19 +95,14 @@ export function IndustryPageTemplate({ data }: { data: IndustryPageData }) {
             <p className="text-[11px] tracking-[3px] uppercase mb-8 text-text-secondary" style={{ fontFamily: 'var(--font-mono)' }}>
               Services for {data.name}
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {data.services.map((svc) => (
-                <Link
+                <ContentCard
                   key={svc.href}
                   href={svc.href}
-                  className="p-5 rounded-xl border border-space-border hover:-translate-y-1 transition-all group"
-                  style={{ background: '#13192A', borderTop: `3px solid ${svc.color}` }}
-                >
-                  <p className="text-text-primary font-semibold mb-1 group-hover:text-electric-blue transition-colors" style={{ fontFamily: 'var(--font-display)' }}>
-                    {svc.name} &rarr;
-                  </p>
-                  <p className="text-text-secondary text-sm">{svc.relevance}</p>
-                </Link>
+                  title={svc.name}
+                  description={svc.relevance}
+                />
               ))}
             </div>
           </motion.div>
@@ -114,7 +110,7 @@ export function IndustryPageTemplate({ data }: { data: IndustryPageData }) {
       </section>
 
       {/* Compliance */}
-      <section className="py-20 px-6 lg:px-8" style={{ background: '#0D1117' }}>
+      <section className="py-20 px-6 lg:px-8" style={{ background: '#12100D' }}>
         <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -127,7 +123,7 @@ export function IndustryPageTemplate({ data }: { data: IndustryPageData }) {
             </p>
             <div className="flex flex-col gap-4">
               {data.compliance.map((c, i) => (
-                <div key={i} className="flex flex-col md:flex-row gap-3 p-5 rounded-xl border border-space-border" style={{ background: '#13192A' }}>
+                <div key={i} className="flex flex-col md:flex-row gap-3 p-5 rounded-xl border border-space-border" style={{ background: '#171411' }}>
                   <p className="text-electric-blue font-medium min-w-40 shrink-0" style={{ fontFamily: 'var(--font-display)' }}>
                     {c.title}
                   </p>
@@ -141,7 +137,7 @@ export function IndustryPageTemplate({ data }: { data: IndustryPageData }) {
 
       {/* Active work */}
       {data.activeWork && (
-        <section className="py-20 px-6 lg:px-8" style={{ background: '#05080F' }}>
+        <section className="py-20 px-6 lg:px-8" style={{ background: '#0C0A08' }}>
           <div className="max-w-5xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -154,11 +150,11 @@ export function IndustryPageTemplate({ data }: { data: IndustryPageData }) {
               </p>
               <div
                 className="p-8 rounded-xl border border-space-border"
-                style={{ background: '#13192A', borderTop: `3px solid ${data.activeWork.color}` }}
+                style={{ background: '#171411', borderTop: '1px solid #2E261F' }}
               >
                 <span
                   className="inline-flex px-2 py-0.5 rounded-full text-[10px] font-medium mb-4"
-                  style={{ background: '#00E5A015', color: '#00E5A0', fontFamily: 'var(--font-mono)' }}
+                  style={{ background: '#FFBF0015', color: '#FFBF00', fontFamily: 'var(--font-mono)' }}
                 >
                   Active
                 </span>
@@ -173,7 +169,7 @@ export function IndustryPageTemplate({ data }: { data: IndustryPageData }) {
       )}
 
       {/* CTA */}
-      <section className="py-24 px-6 lg:px-8 text-center" style={{ background: '#0D1117' }}>
+      <section className="py-24 px-6 lg:px-8 text-center" style={{ background: '#12100D' }}>
         <div className="max-w-2xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

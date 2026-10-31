@@ -10,7 +10,7 @@ export default function AboutPage() {
   return (
     <div className="bg-space-dark min-h-screen">
       {/* Hero */}
-      <section className="pt-32 pb-20 px-6 lg:px-8" style={{ background: '#05080F' }}>
+      <section className="pt-32 pb-20 px-6 lg:px-8" style={{ background: '#0C0A08' }}>
         <div className="max-w-4xl mx-auto">
           <h1
             className="text-5xl lg:text-6xl font-bold text-text-primary leading-[1.05] mb-8"
@@ -27,9 +27,9 @@ export default function AboutPage() {
       </section>
 
       {/* Philosophy */}
-      <section className="py-20 px-6 lg:px-8" style={{ background: '#0D1117' }}>
+      <section className="py-20 px-6 lg:px-8" style={{ background: '#12100D' }}>
         <div className="max-w-5xl mx-auto">
-          <p className="text-quantum-green text-[11px] tracking-[3px] uppercase mb-12" style={{ fontFamily: 'var(--font-mono)' }}>
+          <p className="text-electric-blue text-[11px] tracking-[3px] uppercase mb-12" style={{ fontFamily: 'var(--font-mono)' }}>
             Philosophy
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -42,18 +42,18 @@ export default function AboutPage() {
               {
                 title: 'No Dependencies',
                 body: 'Self-hosted infrastructure. No vendor lock-in. Clients own their data and their platform. If we go away, their systems keep running.',
-                color: '#00E5A0',
+                color: '#FFBF00',
               },
               {
                 title: 'Long-term Thinking',
                 body: 'We build institutions, not projects. The decisions we make today are designed to hold up at 10x scale without a rewrite.',
-                color: '#A855F7',
+                color: '#FFBF00',
               },
             ].map((pillar) => (
               <div
                 key={pillar.title}
                 className="p-6 rounded-xl border border-space-border"
-                style={{ background: '#13192A', borderTop: `3px solid ${pillar.color}` }}
+                style={{ background: '#171411', borderTop: '1px solid #2E261F' }}
               >
                 <h3
                   className="text-text-primary font-bold text-xl mb-3"
@@ -69,9 +69,9 @@ export default function AboutPage() {
       </section>
 
       {/* What We Have Built */}
-      <section className="py-20 px-6 lg:px-8" style={{ background: '#05080F' }}>
+      <section className="py-20 px-6 lg:px-8" style={{ background: '#0C0A08' }}>
         <div className="max-w-5xl mx-auto">
-          <p className="text-quantum-green text-[11px] tracking-[3px] uppercase mb-12" style={{ fontFamily: 'var(--font-mono)' }}>
+          <p className="text-electric-blue text-[11px] tracking-[3px] uppercase mb-12" style={{ fontFamily: 'var(--font-mono)' }}>
             Internal Proof
           </p>
           <h2
@@ -106,7 +106,7 @@ export default function AboutPage() {
               <div
                 key={item.system}
                 className="flex flex-col md:flex-row gap-4 p-6 rounded-xl border border-space-border"
-                style={{ background: '#13192A' }}
+                style={{ background: '#171411' }}
               >
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
@@ -118,7 +118,7 @@ export default function AboutPage() {
                     </h3>
                     <span
                       className="px-2 py-0.5 rounded-full text-[10px]"
-                      style={{ background: '#00E5A015', color: '#00E5A0', fontFamily: 'var(--font-mono)' }}
+                      style={{ background: '#FFBF0015', color: '#FFBF00', fontFamily: 'var(--font-mono)' }}
                     >
                       {item.status}
                     </span>
@@ -132,15 +132,15 @@ export default function AboutPage() {
       </section>
 
       {/* Founders */}
-      <section className="py-20 px-6 lg:px-8" style={{ background: '#0D1117' }}>
+      <section className="py-20 px-6 lg:px-8" style={{ background: '#12100D' }}>
         <div className="max-w-5xl mx-auto">
-          <p className="text-quantum-green text-[11px] tracking-[3px] uppercase mb-12" style={{ fontFamily: 'var(--font-mono)' }}>
+          <p className="text-electric-blue text-[11px] tracking-[3px] uppercase mb-12" style={{ fontFamily: 'var(--font-mono)' }}>
             Founders
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div
               className="p-6 rounded-xl border border-space-border"
-              style={{ background: '#13192A' }}
+              style={{ background: '#171411' }}
             >
               {/* Avatar placeholder */}
               <div
@@ -169,9 +169,9 @@ export default function AboutPage() {
       </section>
 
       {/* Group Companies */}
-      <section className="py-20 px-6 lg:px-8" style={{ background: '#05080F' }}>
+      <section className="py-20 px-6 lg:px-8" style={{ background: '#0C0A08' }}>
         <div className="max-w-5xl mx-auto">
-          <p className="text-quantum-green text-[11px] tracking-[3px] uppercase mb-8" style={{ fontFamily: 'var(--font-mono)' }}>
+          <p className="text-electric-blue text-[11px] tracking-[3px] uppercase mb-8" style={{ fontFamily: 'var(--font-mono)' }}>
             Group Context
           </p>
           <p className="text-text-secondary text-lg leading-relaxed max-w-2xl">
@@ -183,7 +183,7 @@ export default function AboutPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 px-6 lg:px-8 text-center" style={{ background: '#0D1117' }}>
+      <section className="py-24 px-6 lg:px-8 text-center" style={{ background: '#12100D' }}>
         <div className="max-w-2xl mx-auto">
           <h2
             className="text-3xl font-bold text-text-primary mb-4"

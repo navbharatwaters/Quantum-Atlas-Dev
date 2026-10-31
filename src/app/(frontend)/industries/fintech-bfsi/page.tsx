@@ -19,10 +19,10 @@ const data: IndustryPageData = {
     { title: 'Customer service call volume', body: 'Balance enquiries, transaction disputes, loan status updates — high-volume, repetitive calls that trained agents should not be handling.' },
   ],
   services: [
-    { name: 'Document Intelligence', href: '/services/document-intelligence', color: '#00E5A0', relevance: 'KYC extraction, loan document processing, bank statement analysis' },
-    { name: 'Enterprise RAG', href: '/services/enterprise-rag', color: '#A855F7', relevance: 'Regulatory compliance Q&A — RBI/SEBI/IRDAI circular search with citations' },
+    { name: 'Document Intelligence', href: '/services/document-intelligence', color: '#FFBF00', relevance: 'KYC extraction, loan document processing, bank statement analysis' },
+    { name: 'Enterprise RAG', href: '/services/enterprise-rag', color: '#FFBF00', relevance: 'Regulatory compliance Q&A — RBI/SEBI/IRDAI circular search with citations' },
     { name: 'AI Voice Agents', href: '/services/ai-voice-agents', color: '#FFBF00', relevance: 'Customer service at scale — balance, status, FAQs — $0.08/min' },
-    { name: 'AI Automation', href: '/services/ai-automation', color: '#00E5A0', relevance: 'Straight-through processing for standard loan and KYC workflows' },
+    { name: 'AI Automation', href: '/services/ai-automation', color: '#FFBF00', relevance: 'Straight-through processing for standard loan and KYC workflows' },
   ],
   compliance: [
     { title: 'Data Localisation (RBI)', body: 'RBI requires certain financial data to be stored and processed in India. On-premise deployment satisfies this requirement architecturally.' },

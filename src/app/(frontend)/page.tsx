@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     title: 'Quantum Atlas — Production-Grade AI',
     description: 'Built in production. Proven at scale. Voice AI, Document Intelligence, Enterprise RAG, Custom SaaS.',
     type: 'website',
-    url: 'https://quantumatlas.ai',
+    url: 'https://quantumatlas.dev',
   },
 }
 
@@ -27,9 +27,9 @@ const organizationJsonLd = {
   '@graph': [
     {
       '@type': 'Organization',
-      '@id': 'https://quantumatlas.ai/#organization',
+      '@id': 'https://quantumatlas.dev/#organization',
       name: 'Quantum Atlas',
-      url: 'https://quantumatlas.ai',
+      url: 'https://quantumatlas.dev',
       description: 'Enterprise AI implementation partner — voice agents, document intelligence, RAG systems and custom SaaS. Self-hosted. Production-proven.',
       address: {
         '@type': 'PostalAddress',
@@ -40,7 +40,7 @@ const organizationJsonLd = {
       contactPoint: {
         '@type': 'ContactPoint',
         contactType: 'sales',
-        email: 'hello@quantumatlas.ai',
+        email: 'contact@quantumatlas.dev',
       },
       sameAs: [],
       offers: [
@@ -53,13 +53,13 @@ const organizationJsonLd = {
     },
     {
       '@type': 'WebSite',
-      '@id': 'https://quantumatlas.ai/#website',
-      url: 'https://quantumatlas.ai',
+      '@id': 'https://quantumatlas.dev/#website',
+      url: 'https://quantumatlas.dev',
       name: 'Quantum Atlas',
-      publisher: { '@id': 'https://quantumatlas.ai/#organization' },
+      publisher: { '@id': 'https://quantumatlas.dev/#organization' },
       potentialAction: {
         '@type': 'SearchAction',
-        target: { '@type': 'EntryPoint', urlTemplate: 'https://quantumatlas.ai/blog?q={search_term_string}' },
+        target: { '@type': 'EntryPoint', urlTemplate: 'https://quantumatlas.dev/blog?q={search_term_string}' },
         'query-input': 'required name=search_term_string',
       },
     },

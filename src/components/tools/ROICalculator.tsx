@@ -32,13 +32,13 @@ export function ROICalculator() {
   const docAnnual = docSaving * 12
 
   const voiceChartData = [
-    { name: 'Current cost', value: Math.round(currentVoiceCost), color: '#1E2D4A' },
+    { name: 'Current cost', value: Math.round(currentVoiceCost), color: '#2E261F' },
     { name: 'With Quantum Atlas', value: Math.round(qaVoiceCost), color: '#FFBF00' },
   ]
   const docChartData = [
-    { name: 'Current cost', value: Math.round(currentDocTotal), color: '#1E2D4A' },
-    { name: 'Nanonets ($0.30/pg)', value: Math.round(totalPages * 0.30), color: '#1E2D4A' },
-    { name: 'With Quantum Atlas', value: Math.round(qaDocTotal), color: '#00E5A0' },
+    { name: 'Current cost', value: Math.round(currentDocTotal), color: '#2E261F' },
+    { name: 'Nanonets ($0.30/pg)', value: Math.round(totalPages * 0.30), color: '#2E261F' },
+    { name: 'With Quantum Atlas', value: Math.round(qaDocTotal), color: '#FFBF00' },
   ]
 
   const inputClass = "w-full px-4 py-3 rounded-lg border border-space-border bg-space-dark text-text-primary text-sm focus:outline-none focus:border-electric-blue transition-colors"
@@ -47,7 +47,7 @@ export function ROICalculator() {
   return (
     <div
       className="rounded-2xl border border-space-border overflow-hidden"
-      style={{ background: '#13192A' }}
+      style={{ background: '#171411' }}
     >
       {/* Tabs */}
       <div className="flex border-b border-space-border">
@@ -57,8 +57,8 @@ export function ROICalculator() {
             onClick={() => setTab(t)}
             className="flex-1 px-6 py-4 text-sm font-medium transition-colors"
             style={{
-              background: tab === t ? '#1E2D4A' : 'transparent',
-              color: tab === t ? '#E8EEFF' : '#8896B3',
+              background: tab === t ? '#2E261F' : 'transparent',
+              color: tab === t ? '#FAF7F5' : '#A8998A',
               borderBottom: tab === t ? '2px solid #FFBF00' : '2px solid transparent',
               fontFamily: 'var(--font-display)',
             }}
@@ -114,15 +114,15 @@ export function ROICalculator() {
             Your savings
           </p>
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 rounded-xl" style={{ background: '#05080F' }}>
+            <div className="p-4 rounded-xl" style={{ background: '#0C0A08' }}>
               <p className="text-text-secondary text-xs mb-1">Monthly saving</p>
-              <p className="text-2xl font-bold text-quantum-green" style={{ fontFamily: 'var(--font-mono)' }}>
+              <p className="text-2xl font-bold text-electric-blue" style={{ fontFamily: 'var(--font-mono)' }}>
                 ${Math.round(tab === 'voice' ? voiceSaving : docSaving).toLocaleString()}
               </p>
             </div>
-            <div className="p-4 rounded-xl" style={{ background: '#05080F' }}>
+            <div className="p-4 rounded-xl" style={{ background: '#0C0A08' }}>
               <p className="text-text-secondary text-xs mb-1">Annual saving</p>
-              <p className="text-2xl font-bold text-quantum-green" style={{ fontFamily: 'var(--font-mono)' }}>
+              <p className="text-2xl font-bold text-electric-blue" style={{ fontFamily: 'var(--font-mono)' }}>
                 ${Math.round(tab === 'voice' ? voiceAnnual : docAnnual).toLocaleString()}
               </p>
             </div>
@@ -131,12 +131,12 @@ export function ROICalculator() {
           <div className="h-48">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={tab === 'voice' ? voiceChartData : docChartData} barSize={40}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1E2D4A" />
-                <XAxis dataKey="name" tick={{ fill: '#8896B3', fontSize: 11 }} />
-                <YAxis tick={{ fill: '#8896B3', fontSize: 11 }} tickFormatter={(v: number) => `$${v}`} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#2E261F" />
+                <XAxis dataKey="name" tick={{ fill: '#A8998A', fontSize: 11 }} />
+                <YAxis tick={{ fill: '#A8998A', fontSize: 11 }} tickFormatter={(v: number) => `$${v}`} />
                 <Tooltip
-                  contentStyle={{ background: '#13192A', border: '1px solid #1E2D4A', borderRadius: 8 }}
-                  labelStyle={{ color: '#E8EEFF' }}
+                  contentStyle={{ background: '#171411', border: '1px solid #2E261F', borderRadius: 8 }}
+                  labelStyle={{ color: '#FAF7F5' }}
                   formatter={(v) => {
                     const num = typeof v === 'number' ? v : Number(v ?? 0)
                     return [`$${num.toLocaleString()}`, 'Monthly cost'] as [string, string]

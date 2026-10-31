@@ -19,9 +19,9 @@ const data: IndustryPageData = {
     { title: 'Multi-department data isolation', body: "Department A must not be able to access Department B's data — even on shared infrastructure." },
   ],
   services: [
-    { name: 'Enterprise RAG', href: '/services/enterprise-rag', color: '#A855F7', relevance: 'Circular search, policy Q&A, regulation lookup — with citations on every answer' },
-    { name: 'Document Intelligence', href: '/services/document-intelligence', color: '#00E5A0', relevance: 'Bulk processing of government documents, forms, and notifications' },
-    { name: 'AI Automation', href: '/services/ai-automation', color: '#00E5A0', relevance: 'Workflow automation for document routing, approval chains, and compliance checks' },
+    { name: 'Enterprise RAG', href: '/services/enterprise-rag', color: '#FFBF00', relevance: 'Circular search, policy Q&A, regulation lookup — with citations on every answer' },
+    { name: 'Document Intelligence', href: '/services/document-intelligence', color: '#FFBF00', relevance: 'Bulk processing of government documents, forms, and notifications' },
+    { name: 'AI Automation', href: '/services/ai-automation', color: '#FFBF00', relevance: 'Workflow automation for document routing, approval chains, and compliance checks' },
     { name: 'Custom SaaS Dev', href: '/services/saas-development', color: '#FFBF00', relevance: 'Purpose-built government portals — compliant, maintainable, sovereign' },
   ],
   compliance: [
@@ -33,7 +33,7 @@ const data: IndustryPageData = {
   activeWork: {
     sector: 'Government · Customs & Taxation · IGST',
     outcome: '40+ senior Customs Commissioners evaluating for IGST department deployment — on-premise RAG for circular and notification search.',
-    color: '#A855F7',
+    color: '#FFBF00',
   },
   ctaHeadline: 'Building AI for a government department?',
 }

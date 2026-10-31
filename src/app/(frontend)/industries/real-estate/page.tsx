@@ -19,9 +19,9 @@ const data: IndustryPageData = {
     { title: 'Regulatory document tracking', body: 'RERA compliance, environmental clearances, fire NOCs, building plan approvals — each project has a document checklist that must be maintained and updated.' },
   ],
   services: [
-    { name: 'Document Intelligence', href: '/services/document-intelligence', color: '#00E5A0', relevance: 'Sale deed extraction, lease term analysis, NOC and clearance processing' },
-    { name: 'Enterprise RAG', href: '/services/enterprise-rag', color: '#A855F7', relevance: 'Portfolio lease search, obligation tracking, regulatory compliance Q&A' },
-    { name: 'AI Automation', href: '/services/ai-automation', color: '#00E5A0', relevance: 'Renewal notifications, document routing, checklist automation' },
+    { name: 'Document Intelligence', href: '/services/document-intelligence', color: '#FFBF00', relevance: 'Sale deed extraction, lease term analysis, NOC and clearance processing' },
+    { name: 'Enterprise RAG', href: '/services/enterprise-rag', color: '#FFBF00', relevance: 'Portfolio lease search, obligation tracking, regulatory compliance Q&A' },
+    { name: 'AI Automation', href: '/services/ai-automation', color: '#FFBF00', relevance: 'Renewal notifications, document routing, checklist automation' },
   ],
   compliance: [
     { title: 'RERA Compliance', body: 'Project documentation indexed and searchable — builder disclosures, approvals, and completion certificates tracked against RERA requirements.' },

@@ -86,9 +86,9 @@ const data: ServicePageData = {
     },
   ],
   relatedServices: [
-    { name: 'AI Automation', href: '/services/ai-automation', color: '#00E5A0' },
-    { name: 'Document Intelligence', href: '/services/document-intelligence', color: '#00E5A0' },
-    { name: 'Enterprise RAG', href: '/services/enterprise-rag', color: '#A855F7' },
+    { name: 'AI Automation', href: '/services/ai-automation', color: '#FFBF00' },
+    { name: 'Document Intelligence', href: '/services/document-intelligence', color: '#FFBF00' },
+    { name: 'Enterprise RAG', href: '/services/enterprise-rag', color: '#FFBF00' },
   ],
 }
 

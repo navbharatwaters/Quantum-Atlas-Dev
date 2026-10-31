@@ -47,7 +47,7 @@ export function WhitepaperGateFull({ whitepaper }: { whitepaper: Whitepaper }) {
   return (
     <div
       className="p-6 rounded-xl border border-space-border flex flex-col gap-4"
-      style={{ background: '#13192A', borderTop: `3px solid ${whitepaper.color}` }}
+      style={{ background: '#171411', borderTop: '1px solid #2E261F' }}
     >
       <div>
         <span

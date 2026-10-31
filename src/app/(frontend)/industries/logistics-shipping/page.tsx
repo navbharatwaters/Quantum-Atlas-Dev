@@ -20,9 +20,9 @@ const data: IndustryPageData = {
   ],
   services: [
     { name: 'AI Voice Agents', href: '/services/ai-voice-agents', color: '#FFBF00', relevance: 'Inbound call handling, shipment status, delivery notifications — $0.08/min' },
-    { name: 'Document Intelligence', href: '/services/document-intelligence', color: '#00E5A0', relevance: 'BOE, BL, certificates — bulk processing for your document types' },
-    { name: 'AI Automation', href: '/services/ai-automation', color: '#00E5A0', relevance: 'Connect shipping, customs, and accounting systems — eliminate manual re-entry' },
-    { name: 'Enterprise RAG', href: '/services/enterprise-rag', color: '#A855F7', relevance: 'Customs regulation search, tariff lookup, circular compliance Q&A' },
+    { name: 'Document Intelligence', href: '/services/document-intelligence', color: '#FFBF00', relevance: 'BOE, BL, certificates — bulk processing for your document types' },
+    { name: 'AI Automation', href: '/services/ai-automation', color: '#FFBF00', relevance: 'Connect shipping, customs, and accounting systems — eliminate manual re-entry' },
+    { name: 'Enterprise RAG', href: '/services/enterprise-rag', color: '#FFBF00', relevance: 'Customs regulation search, tariff lookup, circular compliance Q&A' },
   ],
   compliance: [
     { title: 'Customs Compliance', body: 'Our RAG system indexes IGST circulars, customs notifications, and tariff schedules. Officers can query for applicable regulations with citations to the source document.' },

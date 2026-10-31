@@ -24,7 +24,7 @@ const services = [
   },
   {
     id: 'idp',
-    color: '#00E5A0',
+    color: '#FFBF00',
     badge: 'IDP',
     label: 'Document Intelligence',
     heading: 'Hundreds of documents. Minutes, not days.',
@@ -42,7 +42,7 @@ const services = [
   },
   {
     id: 'rag',
-    color: '#A855F7',
+    color: '#FFBF00',
     badge: 'RAG',
     label: 'Enterprise RAG',
     heading: 'Knowledge systems governments trust',

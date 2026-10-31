@@ -56,7 +56,7 @@ export function TechStack() {
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.8, ease: 'easeOut' }}
         >
-          <p className="text-quantum-green text-[11px] tracking-[3px] uppercase mb-4" style={{ fontFamily: 'var(--font-mono)' }}>
+          <p className="text-electric-blue text-[11px] tracking-[3px] uppercase mb-4" style={{ fontFamily: 'var(--font-mono)' }}>
             The Stack
           </p>
           <h2 className="text-4xl font-bold text-text-primary mb-4" style={{ fontFamily: 'var(--font-display)' }}>

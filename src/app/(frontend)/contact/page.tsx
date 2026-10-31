@@ -44,12 +44,12 @@ export default function ContactPage() {
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           {/* Left: context */}
           <div>
-            <p className="text-quantum-green text-[11px] tracking-[3px] uppercase mb-6" style={{ fontFamily: 'var(--font-mono)' }}>
+            <p className="text-electric-blue text-[11px] tracking-[3px] uppercase mb-6" style={{ fontFamily: 'var(--font-mono)' }}>
               Discovery Call
             </p>
             <h1
-              className="text-4xl lg:text-5xl font-bold text-text-primary leading-[1.1] mb-6"
-              style={{ fontFamily: 'var(--font-display)' }}
+              className="font-bold text-text-primary leading-[1.1] mb-6"
+              style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 2.5rem)' }}
             >
               Let&apos;s talk about what you&apos;re building
             </h1>
@@ -66,7 +66,7 @@ export default function ContactPage() {
                 'No obligation — we are selective about the work we take on',
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-3">
-                  <span className="text-quantum-green mt-0.5 shrink-0">&#9670;</span>
+                  <span className="text-electric-blue mt-0.5 shrink-0">&#9670;</span>
                   <span className="text-text-secondary">{item}</span>
                 </div>
               ))}
@@ -74,7 +74,7 @@ export default function ContactPage() {
 
             <div
               className="p-5 rounded-xl border border-space-border"
-              style={{ background: '#13192A' }}
+              style={{ background: '#171411' }}
             >
               <p className="text-text-secondary text-sm mb-1">Direct contact</p>
               <a
@@ -91,7 +91,7 @@ export default function ContactPage() {
           {/* Right: form */}
           <div
             className="rounded-2xl border border-space-border p-8"
-            style={{ background: '#13192A' }}
+            style={{ background: '#171411' }}
           >
             <ContactForm />
           </div>

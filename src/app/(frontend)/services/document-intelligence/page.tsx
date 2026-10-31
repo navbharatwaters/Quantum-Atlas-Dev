@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 const data: ServicePageData = {
   slug: 'document-intelligence',
   name: 'Document Intelligence',
-  color: '#00E5A0',
-  colorName: 'quantum-green',
+  color: '#FFBF00',
+  colorName: 'electric-blue',
   tagline: 'Hundreds of documents. Minutes, not days.',
   heroMetrics: [
     { value: '$0.08/page', label: 'Processing cost' },
@@ -89,8 +89,8 @@ const data: ServicePageData = {
     },
   ],
   relatedServices: [
-    { name: 'Enterprise RAG', href: '/services/enterprise-rag', color: '#A855F7' },
-    { name: 'AI Automation', href: '/services/ai-automation', color: '#00E5A0' },
+    { name: 'Enterprise RAG', href: '/services/enterprise-rag', color: '#FFBF00' },
+    { name: 'AI Automation', href: '/services/ai-automation', color: '#FFBF00' },
     { name: 'AI Voice Agents', href: '/services/ai-voice-agents', color: '#FFBF00' },
   ],
 }

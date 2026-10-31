@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { PageHero } from '@/components/shared/PageHero'
 
 export const metadata: Metadata = {
   title: 'Implementation Guides',
@@ -15,28 +16,28 @@ const guides = [
 export default function GuidesPage() {
   return (
     <div className="bg-space-dark min-h-screen">
-      <section className="pt-32 pb-16 px-6 lg:px-8" style={{ background: '#05080F' }}>
-        <div className="max-w-5xl mx-auto">
-          <p className="text-quantum-green text-[11px] tracking-[3px] uppercase mb-4" style={{ fontFamily: 'var(--font-mono)' }}>
-            Implementation Guides
-          </p>
-          <h1 className="text-4xl font-bold text-text-primary mb-4" style={{ fontFamily: 'var(--font-display)' }}>
-            Before you build — understand what you need.
-          </h1>
-          <p className="text-text-secondary text-lg">Free access. No email required.</p>
-        </div>
-      </section>
-
+      <PageHero
+        eyebrow="Implementation Guides"
+        heading="Before you build — understand what you need."
+        body="Free access. No email required."
+      />
       <section className="py-16 px-6 lg:px-8">
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
           {guides.map((guide) => (
-            <div key={guide.title} className="p-6 rounded-xl border border-space-border" style={{ background: '#13192A' }}>
-              <h2 className="text-text-primary font-semibold text-lg mb-4" style={{ fontFamily: 'var(--font-display)' }}>
+            <div
+              key={guide.title}
+              className="flex flex-col p-6 rounded-xl border border-[#2E261F]"
+              style={{ background: '#171411', borderRadius: '12px' }}
+            >
+              <p
+                className="font-semibold text-text-primary mb-4"
+                style={{ fontFamily: 'var(--font-display)', fontSize: '17px' }}
+              >
                 {guide.title}
-              </h2>
+              </p>
               <ol className="flex flex-col gap-2">
                 {guide.steps.map((step, i) => (
-                  <li key={i} className="flex items-start gap-3 text-sm text-text-secondary">
+                  <li key={i} className="flex items-start gap-3 text-[14px] text-text-secondary leading-[1.65]">
                     <span className="text-electric-blue shrink-0" style={{ fontFamily: 'var(--font-mono)' }}>0{i + 1}</span>
                     {step}
                   </li>

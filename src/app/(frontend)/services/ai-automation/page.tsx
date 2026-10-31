@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 const data: ServicePageData = {
   slug: 'ai-automation',
   name: 'AI Automation',
-  color: '#00E5A0',
-  colorName: 'quantum-green',
+  color: '#FFBF00',
+  colorName: 'electric-blue',
   tagline: 'Automate the work, not just the reporting about it.',
   heroMetrics: [
     { value: '15 → 2', label: 'Team size reduction' },
@@ -81,7 +81,7 @@ const data: ServicePageData = {
   ],
   relatedServices: [
     { name: 'AI Voice Agents', href: '/services/ai-voice-agents', color: '#FFBF00' },
-    { name: 'Document Intelligence', href: '/services/document-intelligence', color: '#00E5A0' },
+    { name: 'Document Intelligence', href: '/services/document-intelligence', color: '#FFBF00' },
     { name: 'Custom SaaS Dev', href: '/services/saas-development', color: '#FFBF00' },
   ],
 }

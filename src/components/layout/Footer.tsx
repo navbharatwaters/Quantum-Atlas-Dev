@@ -136,9 +136,13 @@ export function Footer() {
           <p className="text-text-secondary text-sm">
             &copy; 2026 Quantum Atlas. All rights reserved.
           </p>
-          <p className="font-mono text-xs text-text-secondary/50 tracking-widest">
-            20.5937&deg;N, 78.9629&deg;E
-          </p>
+          <a
+            href="mailto:contact@quantumatlas.dev"
+            className="text-text-secondary text-sm hover:text-text-primary transition-colors"
+            style={{ fontFamily: 'var(--font-mono)' }}
+          >
+            contact@quantumatlas.dev
+          </a>
         </div>
       </div>
     </footer>
