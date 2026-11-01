@@ -104,7 +104,6 @@ export interface UiStrings {
     services: string
     industries: string
     company: string
-    legal: string
     industryLinks: { href: string; label: string }[]
     companyLinks: { href: string; label: string }[]
     legalLinks: { href: string; label: string }[]
@@ -112,6 +111,10 @@ export interface UiStrings {
     copyright: string
     contactPerson: string
     ariaLabel: string
+    socialLabel: string
+    comingSoon: string
+    marketingSales: string
+    legalNavLabel: string
   }
   chat: {
     greeting: string
@@ -182,7 +185,6 @@ const en: UiStrings = {
     services: 'Services',
     industries: 'Industries',
     company: 'Company',
-    legal: 'Legal',
     serviceLabels: [
       'AI Voice Agents',
       'Document Intelligence',
@@ -198,12 +200,15 @@ const en: UiStrings = {
       { label: 'Legal', href: '/industries/legal' },
       { label: 'Manufacturing', href: '/industries/manufacturing' },
       { label: 'Healthcare', href: '/industries/healthcare' },
+      { label: 'Real Estate', href: '/industries/real-estate' },
+      { label: 'All Industries', href: '/industries' },
     ],
     companyLinks: [
       { label: 'About', href: '/about' },
-      { label: 'Blog', href: '/blog' },
-      { label: 'Knowledge Hub', href: '/knowledge' },
       { label: 'Case Studies', href: '/knowledge/case-studies' },
+      { label: 'Knowledge Hub', href: '/knowledge' },
+      { label: 'ROI Calculator', href: '/knowledge/roi-calculator' },
+      { label: 'Blog', href: '/blog' },
       { label: 'Contact', href: '/contact' },
     ],
     legalLinks: [
@@ -213,6 +218,10 @@ const en: UiStrings = {
     copyright: '© 2026 Quantum Atlas. All rights reserved.',
     contactPerson: 'Contact',
     ariaLabel: 'Site footer',
+    socialLabel: 'Social media',
+    comingSoon: 'Coming soon',
+    marketingSales: 'Marketing & Sales',
+    legalNavLabel: 'Legal',
   },
   chat: {
     greeting:
@@ -275,7 +284,6 @@ const ru: UiStrings = {
     services: 'Услуги',
     industries: 'Отрасли',
     company: 'Компания',
-    legal: 'Правовая информация',
     serviceLabels: [
       'Голосовые ИИ-агенты',
       'Обработка документов',
@@ -291,12 +299,15 @@ const ru: UiStrings = {
       { label: 'Юриспруденция', href: '/industries/legal' },
       { label: 'Производство', href: '/industries/manufacturing' },
       { label: 'Здравоохранение', href: '/industries/healthcare' },
+      { label: 'Недвижимость', href: '/industries/real-estate' },
+      { label: 'Все отрасли', href: '/industries' },
     ],
     companyLinks: [
       { label: 'О компании', href: '/about' },
-      { label: 'Блог', href: '/blog' },
-      { label: 'База знаний', href: '/knowledge' },
       { label: 'Кейсы', href: '/knowledge/case-studies' },
+      { label: 'База знаний', href: '/knowledge' },
+      { label: 'ROI-калькулятор', href: '/knowledge/roi-calculator' },
+      { label: 'Блог', href: '/blog' },
       { label: 'Контакты', href: '/contact' },
     ],
     legalLinks: [
@@ -306,6 +317,10 @@ const ru: UiStrings = {
     copyright: '© 2026 Quantum Atlas. Все права защищены.',
     contactPerson: 'Контактное лицо',
     ariaLabel: 'Подвал сайта',
+    socialLabel: 'Социальные сети',
+    comingSoon: 'Скоро',
+    marketingSales: 'Маркетинг и продажи',
+    legalNavLabel: 'Правовая информация',
   },
   chat: {
     greeting:

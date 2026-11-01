@@ -27,6 +27,8 @@ const staticPages: MetadataRoute.Sitemap = [
   { url: `${BASE_URL}/knowledge/roi-calculator`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
   { url: `${BASE_URL}/knowledge/guides`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
   { url: `${BASE_URL}/knowledge/case-studies`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+  { url: `${BASE_URL}/privacy`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
+  { url: `${BASE_URL}/terms`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
 ]
 
 // Russian pages that exist (see RU_PAGES in src/lib/i18n.ts), each linked back to its English counterpart
