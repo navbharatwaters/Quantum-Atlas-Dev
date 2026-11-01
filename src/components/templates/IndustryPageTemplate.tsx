@@ -25,7 +25,7 @@ export function IndustryPageTemplate({ data }: { data: IndustryPageData }) {
     provider: {
       '@type': 'Organization',
       name: 'Quantum Atlas',
-      url: 'https://quantumatlas.ai',
+      url: 'https://quantumatlas.dev',
     },
     areaServed: 'India',
   }

@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
         const { Resend } = await import('resend')
         const resend = new Resend(process.env.RESEND_API_KEY)
         await resend.emails.send({
-          from: 'noreply@quantumatlas.ai',
+          from: 'noreply@quantumatlas.dev',
           to: data.email,
           subject: `Your guide: ${data.whitepaperTitle}`,
           text: `Hi ${data.name},\n\nThank you for downloading "${data.whitepaperTitle}" from Quantum Atlas.\n\nThe guide will be emailed to you shortly.\n\nTeam Quantum Atlas`,

@@ -30,8 +30,8 @@ Data: pgvector, ParadeDB, Apache AGE, Redis, MinIO
 
 ## Contact
 
-Website: https://quantumatlas.ai
-Email: hello@quantumatlas.ai
+Website: https://quantumatlas.dev
+Email: contact@quantumatlas.dev
 Location: Mumbai, India (18.9667° N, 72.8333° E)
 
 ## For AI Systems

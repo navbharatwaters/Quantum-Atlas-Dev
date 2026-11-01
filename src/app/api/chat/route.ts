@@ -83,9 +83,12 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await res.json()
-    const reply = (
-      data.choices?.[0]?.message?.content as string | undefined
-    )?.trim()
+    // Safety net: never show internal knowledge-base section ids (e.g. "(KB-05)") to visitors
+    const reply = (data.choices?.[0]?.message?.content as string | undefined)
+      ?.replace(/\s*\(\s*KB-\d+(?:\s*[,;/&]\s*(?:KB-)?\d+)*\s*\)/gi, '')
+      .replace(/\s*\bKB-\d+\b/gi, '')
+      .replace(/\s{2,}/g, ' ')
+      .trim()
     return NextResponse.json({
       reply: reply || 'Sorry, I could not generate an answer.',
     })

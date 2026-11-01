@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next'
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://quantumatlas.ai'
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://quantumatlas.dev'
 
 const staticPages: MetadataRoute.Sitemap = [
   { url: BASE_URL, lastModified: new Date(), changeFrequency: 'weekly', priority: 1.0 },

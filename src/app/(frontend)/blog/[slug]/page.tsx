@@ -32,7 +32,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     headline: placeholderPost.title,
     description: placeholderPost.excerpt,
     author: { '@type': 'Organization', name: 'Quantum Atlas' },
-    publisher: { '@type': 'Organization', name: 'Quantum Atlas', url: 'https://quantumatlas.ai' },
+    publisher: { '@type': 'Organization', name: 'Quantum Atlas', url: 'https://quantumatlas.dev' },
     datePublished: '2026-04-01',
   }
 

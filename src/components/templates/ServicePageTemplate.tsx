@@ -51,7 +51,7 @@ export function ServicePageTemplate({ data }: { data: ServicePageData }) {
         provider: {
           '@type': 'Organization',
           name: 'Quantum Atlas',
-          url: 'https://quantumatlas.ai',
+          url: 'https://quantumatlas.dev',
         },
       },
       {

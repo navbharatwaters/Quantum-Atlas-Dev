@@ -12,7 +12,7 @@ const jsonLd = {
   '@type': 'LocalBusiness',
   name: 'Quantum Atlas',
   description: 'Enterprise AI implementation partner — voice agents, document intelligence, RAG systems and custom SaaS.',
-  url: 'https://quantumatlas.ai',
+  url: 'https://quantumatlas.dev',
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'Mumbai',
