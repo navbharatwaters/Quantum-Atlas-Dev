@@ -1,5 +1,10 @@
 import type { Metadata } from 'next'
 import { PageHero } from '@/components/shared/PageHero'
+import { CmsGuideSection } from '@/components/cms/GuideViews'
+import { listDocs } from '@/lib/cms'
+
+// CMS reads happen at request time (ISR), never at build time.
+export const revalidate = 300
 
 export const metadata: Metadata = {
   title: 'Implementation Guides',
@@ -13,7 +18,8 @@ const guides = [
   { title: 'AI Readiness Self-Assessment', steps: ['Current process documentation', 'Data availability and quality assessment', 'IT infrastructure evaluation', 'Stakeholder readiness check', 'Success criteria definition'] },
 ]
 
-export default function GuidesPage() {
+export default async function GuidesPage() {
+  const cmsGuides = await listDocs('guides', 'en')
   return (
     <div className="bg-space-dark min-h-screen">
       <PageHero
@@ -47,6 +53,7 @@ export default function GuidesPage() {
           ))}
         </div>
       </section>
+      {cmsGuides.length > 0 && <CmsGuideSection items={cmsGuides} />}
     </div>
   )
 }

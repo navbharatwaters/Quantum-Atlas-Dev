@@ -1,17 +1,39 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Script from 'next/script'
+import { notFound } from 'next/navigation'
+import { CmsBlogPost } from '@/components/cms/BlogViews'
+import { legacyPlaceholderPost as placeholderPost, legacySlugs } from '@/content/blog-legacy'
+import { getDoc } from '@/lib/cms'
+import { buildMetadata } from '@/lib/cmsSeo'
 
-// Seed data — swap for live Payload CMS fetch post-launch
-const placeholderPost = {
-  title: 'How We Built a Voice Agent at $0.08/min — Full Technical Breakdown',
-  category: 'Technical Deep Dive',
-  date: 'April 2026',
-  readTime: 12,
-  excerpt: 'A complete breakdown of the architecture, cost components, and engineering decisions behind our production voice AI deployment.',
+// CMS reads happen at request time (ISR), never at build time.
+export const revalidate = 300
+export const dynamicParams = true
+export function generateStaticParams() {
+  return []
 }
 
-export async function generateMetadata(): Promise<Metadata> {
+type Params = { params: Promise<{ slug: string }> }
+
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
+  const { slug } = await params
+  const [en, ru] = await Promise.all([getDoc('blog-posts', slug, 'en'), getDoc('blog-posts', slug, 'ru')])
+  if (en.ok && en.doc) {
+    const post = en.doc
+    return buildMetadata({
+      locale: 'en',
+      path: `/blog/${post.slug}`,
+      title: post.seo?.title || post.title,
+      description: post.seo?.description || post.excerpt,
+      bothLanguages: ru.ok && Boolean(ru.doc),
+      image: post.featuredImage,
+      openGraphType: 'article',
+      publishedTime: post.publishedDate,
+      modifiedTime: post.updatedAt,
+    })
+  }
+  if (!legacySlugs.has(slug)) return { robots: { index: false } }
   return {
     title: placeholderPost.title,
     description: placeholderPost.excerpt,
@@ -23,8 +45,16 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function BlogPostPage({ params }: Params) {
   const { slug } = await params
+  const found = await getDoc('blog-posts', slug, 'en')
+  if (found.ok && found.doc) return <CmsBlogPost locale="en" post={found.doc} />
+  // Not in the CMS: only the old placeholder slugs keep the legacy page; anything else is a 404.
+  // (If the database errored, render nothing cacheable for unknown slugs rather than a cached 404.)
+  if (!legacySlugs.has(slug)) {
+    if (!found.ok) throw new Error('CMS unavailable')
+    notFound()
+  }
 
   const jsonLd = {
     '@context': 'https://schema.org',

@@ -75,3 +75,29 @@
     font-family: var(--font-display);
   }
 }
+
+/* Rich text coming from the CMS (Payload Lexical). Matches the dark / amber theme. */
+.cms-prose { color: #A8998A; font-size: 1.0625rem; line-height: 1.75; }
+.cms-prose > * + * { margin-top: 1.25rem; }
+.cms-prose h1, .cms-prose h2, .cms-prose h3, .cms-prose h4 { color: #FAF7F5; font-family: var(--font-display); font-weight: 700; line-height: 1.25; margin-top: 2.25rem; }
+.cms-prose h2 { font-size: 1.625rem; }
+.cms-prose h3 { font-size: 1.25rem; }
+.cms-prose h4 { font-size: 1.0625rem; }
+.cms-prose strong { color: #FAF7F5; font-weight: 600; }
+.cms-prose a { color: #FFBF00; text-decoration: underline; text-underline-offset: 3px; }
+.cms-prose a:hover { filter: brightness(1.15); }
+.cms-prose ul, .cms-prose ol { padding-left: 1.5rem; }
+.cms-prose ul { list-style: disc; }
+.cms-prose ol { list-style: decimal; }
+.cms-prose li + li { margin-top: 0.4rem; }
+.cms-prose li::marker { color: #FFBF00; }
+.cms-prose blockquote { border-left: 3px solid #FFBF00; padding: 0.25rem 0 0.25rem 1.25rem; color: #FAF7F5; font-style: italic; }
+.cms-prose code { font-family: var(--font-mono); font-size: 0.9em; background: #171411; border: 1px solid #2E261F; border-radius: 4px; padding: 0.1em 0.35em; color: #FAF7F5; }
+.cms-prose pre { background: #171411; border: 1px solid #2E261F; border-radius: 8px; padding: 1rem; overflow-x: auto; }
+.cms-prose pre code { border: 0; padding: 0; background: transparent; }
+.cms-prose hr { border: 0; border-top: 1px solid #2E261F; margin: 2rem 0; }
+.cms-prose img { max-width: 100%; height: auto; border-radius: 8px; }
+.cms-prose .cms-table-wrap, .cms-prose table { max-width: 100%; }
+.cms-prose table { display: block; overflow-x: auto; border-collapse: collapse; font-size: 0.9375rem; }
+.cms-prose th, .cms-prose td { border: 1px solid #2E261F; padding: 0.5rem 0.75rem; text-align: left; vertical-align: top; }
+.cms-prose th { background: #171411; color: #FAF7F5; font-weight: 600; }

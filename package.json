@@ -4,17 +4,20 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "payload generate:importmap && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "payload": "payload",
+    "seed": "tsx scripts/seed-drafts.mts"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
     "@hookform/resolvers": "^5.2.2",
     "@livekit/components-react": "^2.9.20",
-    "@payloadcms/db-postgres": "^3.81.0",
-    "@payloadcms/next": "^3.81.0",
-    "@payloadcms/richtext-lexical": "^3.81.0",
+    "@payloadcms/db-postgres": "3.90.2",
+    "@payloadcms/next": "3.90.2",
+    "@payloadcms/richtext-lexical": "3.90.2",
+    "@payloadcms/ui": "3.90.2",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-slot": "^1.2.4",
@@ -28,9 +31,9 @@
     "livekit-client": "^2.18.3",
     "livekit-server-sdk": "^2.15.1",
     "lucide-react": "^1.7.0",
-    "next": "16.2.2",
+    "next": "16.3.5",
     "nodemailer": "^8.0.5",
-    "payload": "^3.81.0",
+    "payload": "3.90.2",
     "radix-ui": "^1.4.3",
     "react": "19.3.1",
     "react-dom": "19.3.1",
@@ -42,6 +45,7 @@
     "remark-breaks": "^4.0.0",
     "remark-gfm": "^4.0.1",
     "resend": "^6.10.0",
+    "sharp": "^0.34.5",
     "tailwind-merge": "^3.5.0",
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.183.2",
@@ -55,8 +59,10 @@
     "@types/react-dom": "^19",
     "@types/three": "^0.183.1",
     "eslint": "^9",
-    "eslint-config-next": "16.2.2",
+    "eslint-config-next": "16.3.5",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "tsx": "^4.23.15",
+    "typescript": "^5",
+    "yaml": "^2.9.1"
   }
 }

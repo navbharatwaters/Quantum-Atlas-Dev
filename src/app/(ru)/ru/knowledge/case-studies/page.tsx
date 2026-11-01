@@ -1,10 +1,15 @@
 import Script from 'next/script'
 import type { Metadata } from 'next'
 import { CaseStudiesView } from '@/components/pages/CaseStudiesView'
+import { CmsCaseList } from '@/components/cms/CaseViews'
+import { listDocs } from '@/lib/cms'
 import { pageAlternates } from '@/lib/i18n'
 import { ruUrl } from '@/lib/site'
 
 const L = 'ru' as const
+
+// CMS reads happen at request time (ISR), never at build time.
+export const revalidate = 300
 
 const TITLE = 'Кейсы внедрения ИИ в продакшене — Quantum Atlas'
 const DESCRIPTION =
@@ -34,7 +39,9 @@ const jsonLd = {
   isPartOf: { '@type': 'WebSite', name: 'Quantum Atlas', url: ruUrl('/') },
 }
 
-export default function CaseStudiesPageRu() {
+export default async function CaseStudiesPageRu() {
+  const items = await listDocs('case-studies', L)
+  if (items.length > 0) return <CmsCaseList locale={L} items={items} />
   return (
     <>
       <Script

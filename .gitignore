@@ -41,3 +41,6 @@ pnpm-debug.log*
 
 # Design files (if any)
 Kimi_Agent_Amber Theme Site Completed/
+
+# CMS uploads (server uses MEDIA_DIR)
+/media

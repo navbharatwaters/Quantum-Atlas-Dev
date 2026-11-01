@@ -1,6 +1,10 @@
 import { MetadataRoute } from 'next'
 import { RU_PAGES, alternates } from '@/lib/i18n'
 import { SITE_URL_EN as BASE_URL, ruUrl } from '@/lib/site'
+import { sitemapDocs, type CmsCollection } from '@/lib/cms'
+
+// Published CMS slugs are read at request time and refreshed by the CMS revalidate hooks.
+export const revalidate = 300
 
 const staticPages: MetadataRoute.Sitemap = [
   { url: BASE_URL, lastModified: new Date(), changeFrequency: 'weekly', priority: 1.0, alternates: { languages: { en: alternates('/').en, ru: alternates('/').ru } } },
@@ -40,7 +44,27 @@ const russianPages: MetadataRoute.Sitemap = [...RU_PAGES].map((path) => ({
   alternates: { languages: { en: alternates(path).en, ru: alternates(path).ru } },
 }))
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  // Extend post-launch: add dynamic blog posts and case studies from Payload CMS
-  return [...staticPages, ...russianPages]
+const cmsRoutes: { collection: CmsCollection; base: string; ru: boolean }[] = [
+  { collection: 'blog-posts', base: '/blog', ru: true },
+  { collection: 'case-studies', base: '/knowledge/case-studies', ru: true },
+  { collection: 'guides', base: '/knowledge/guides', ru: false },
+]
+
+async function cmsPages(): Promise<MetadataRoute.Sitemap> {
+  const out: MetadataRoute.Sitemap = []
+  for (const r of cmsRoutes) {
+    const docs = await sitemapDocs(r.collection)
+    for (const d of docs) {
+      const path = `${r.base}/${d.slug}`
+      const both = r.ru && d.hasRu
+      const languages = both ? { en: alternates(path).en, ru: alternates(path).ru } : undefined
+      out.push({ url: `${BASE_URL}${path}`, lastModified: d.updatedAt, changeFrequency: 'monthly', priority: 0.6, ...(languages ? { alternates: { languages } } : {}) })
+      if (both) out.push({ url: ruUrl(path), lastModified: d.updatedAt, changeFrequency: 'monthly', priority: 0.6, alternates: { languages } })
+    }
+  }
+  return out
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  return [...staticPages, ...russianPages, ...(await cmsPages())]
 }
