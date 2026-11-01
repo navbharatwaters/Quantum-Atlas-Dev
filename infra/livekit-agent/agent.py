@@ -81,20 +81,45 @@ If you do not know, say so. A short honest answer is better than a confident wro
 """
 
 
+RU_ROOM_PREFIX = "qa-ru-"
+# Deepgram Flux TTS voice for Russian sessions (female: natalia, olga, polina; male: andrei, kirill, maxim, mikhail, nikolai, vladimir)
+RU_TTS_MODEL = os.environ.get("QA_RU_TTS_MODEL", "flux-natalia-ru")
+
+RU_ADDENDUM = """
+
+RUSSIAN SESSION
+This conversation is in Russian. These rules override anything above that conflicts with them.
+- Speak ONLY Russian, formal 'вы'. Maximum 2 to 3 short sentences per turn. Never read lists, URLs or section ids aloud.
+- Pronunciation: when you speak the company name write and say it as «Квантум Атлас». Write product words the way they are pronounced in Russian: RAG — «раг», SaaS — «саас», LiveKit — «лайвкит», PostgreSQL — «постгрес», IDP — «ай-ди-пи», n8n — «эн-восемь-эн».
+- For deeper, commercial or pricing questions, or when you do not know, say you are an AI assistant, that you will pass the question to the team, and give ONLY this Russian contact, never the Indian numbers: contact person Mariia Nabira, phone «плюс семь, девятьсот двадцать два, семьсот сорок четыре, шестьдесят, шестьдесят». If asked for the email, say it as «контакт собака квантум атлас точка дев» and add that it is also on the «Контакты» page of the site. Say the phone number at most once per answer.
+- Do not quote prices, timelines or customer names (same rules as above).
+"""
+
+RU_GREETING = (
+    "Поприветствуйте посетителя тепло и коротко на русском. Представьтесь как ИИ-ассистент "
+    "«Квантум Атлас» и спросите, чем можете помочь."
+)
+
+
 async def entrypoint(ctx: JobContext):
     logger.info(f"Starting agent for room: {ctx.room.name}")
+
+    # Rooms named qa-ru-* come from the Russian site: Russian STT, Russian Flux voice, Russian instructions
+    is_ru = ctx.room.name.startswith(RU_ROOM_PREFIX)
+    logger.info(f"Session language: {'ru' if is_ru else 'en'}" + (f" (TTS {RU_TTS_MODEL})" if is_ru else ""))
 
     await ctx.connect()
 
     participant = await ctx.wait_for_participant()
     logger.info(f"Participant joined: {participant.identity}")
 
-    agent = Agent(instructions=QA_INSTRUCTIONS)
+    agent = Agent(instructions=QA_INSTRUCTIONS + (RU_ADDENDUM if is_ru else ""))
 
     session = AgentSession(
         turn_detection="stt",
         stt=deepgram.STT(
             model="nova-3",
+            **({"language": "ru"} if is_ru else {}),
             endpointing_ms=300,
             no_delay=True,
             interim_results=True,
@@ -104,7 +129,7 @@ async def entrypoint(ctx: JobContext):
             api_key=OPENROUTER_API_KEY,
             base_url="https://openrouter.ai/api/v1",
         ),
-        tts=deepgram.TTS(model="aura-asteria-en"),
+        tts=deepgram.TTSv2(model=RU_TTS_MODEL) if is_ru else deepgram.TTS(model="aura-asteria-en"),
         allow_interruptions=True,
         min_endpointing_delay=0.0,
     )
@@ -122,7 +147,9 @@ async def entrypoint(ctx: JobContext):
 
     @session.on("conversation_item_added")
     def on_item(ev):
-        logger.info(f"CONVERSATION ITEM: role={ev.item.role} text={str(ev.item.text_content)[:80]}")
+        item = ev.item
+        text = getattr(item, "text_content", None)
+        logger.info(f"CONVERSATION ITEM: role={getattr(item, 'role', '?')} text={str(text)[:80]}")
 
     async def inactivity_watchdog():
         while True:
@@ -147,7 +174,9 @@ async def entrypoint(ctx: JobContext):
     asyncio.create_task(inactivity_watchdog())
 
     await session.generate_reply(
-        instructions="Greet the user warmly and briefly. Introduce yourself as the Quantum Atlas AI assistant and ask how you can help."
+        instructions=RU_GREETING
+        if is_ru
+        else "Greet the user warmly and briefly. Introduce yourself as the Quantum Atlas AI assistant and ask how you can help."
     )
 
 

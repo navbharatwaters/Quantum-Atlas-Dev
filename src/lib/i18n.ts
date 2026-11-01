@@ -138,6 +138,9 @@ export interface UiStrings {
     endCall: string
     switchToTextChat: string
     voiceError: string
+    micDenied: string
+    voicePrivacy: string
+    voicePrivacyLink: string
     tryAgain: string
     useTextInstead: string
     voiceReady: string
@@ -246,6 +249,9 @@ const en: UiStrings = {
     endCall: 'End call',
     switchToTextChat: 'Switch to text chat',
     voiceError: 'Could not connect to voice assistant.',
+    micDenied: 'Microphone access was denied. Allow the microphone in your browser settings and try again.',
+    voicePrivacy: 'Voice sessions are processed by AI service providers; a transcript is kept in our server logs.',
+    voicePrivacyLink: 'See Privacy Policy.',
     tryAgain: 'Try again',
     useTextInstead: 'Use text chat instead',
     voiceReady: 'Voice assistant ready',
@@ -345,6 +351,9 @@ const ru: UiStrings = {
     endCall: 'Завершить звонок',
     switchToTextChat: 'Перейти в текстовый чат',
     voiceError: 'Не удалось подключиться к голосовому ассистенту.',
+    micDenied: 'Доступ к микрофону запрещён. Разрешите использование микрофона в настройках браузера и повторите попытку.',
+    voicePrivacy: 'Голосовые сессии обрабатываются поставщиками ИИ-сервисов; расшифровка сохраняется в журналах наших серверов.',
+    voicePrivacyLink: 'См. Политику конфиденциальности.',
     tryAgain: 'Повторить',
     useTextInstead: 'Использовать текстовый чат',
     voiceReady: 'Голосовой ассистент готов',

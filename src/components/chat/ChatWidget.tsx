@@ -16,7 +16,8 @@ import {
   type RemoteParticipant,
   type RemoteTrack,
 } from 'livekit-client'
-import { getUi, type Locale } from '@/lib/i18n'
+import Link from 'next/link'
+import { getUi, localeHref, type Locale } from '@/lib/i18n'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -28,8 +29,6 @@ type VoiceStatus = 'idle' | 'connecting' | 'connected' | 'error'
 
 export function ChatWidget({ locale = 'en' }: { locale?: Locale }) {
   const t = getUi(locale).chat
-  // Voice agent speaks English only: no voice entry points on Russian pages
-  const voiceEnabled = locale !== 'ru'
   const [open, setOpen] = useState(false)
   const [mode, setMode] = useState<ChatMode>('text')
   const [messages, setMessages] = useState<Message[]>([{ role: 'assistant', text: t.greeting }])
@@ -38,17 +37,17 @@ export function ChatWidget({ locale = 'en' }: { locale?: Locale }) {
   const [voiceStatus, setVoiceStatus] = useState<VoiceStatus>('idle')
   const [agentSpeaking, setAgentSpeaking] = useState(false)
   const [micMuted, setMicMuted] = useState(false)
+  const [micDenied, setMicDenied] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const roomRef = useRef<Room | null>(null)
 
   // Hero "Talk to our voice agent" button dispatches this event
   useEffect(() => {
-    if (!voiceEnabled) return
     function handleOpenVoice() { setOpen(true) }
     window.addEventListener('qa:open-voice', handleOpenVoice)
     return () => window.removeEventListener('qa:open-voice', handleOpenVoice)
-  }, [voiceEnabled])
+  }, [])
 
   useEffect(() => {
     if (open) bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -121,10 +120,12 @@ export function ChatWidget({ locale = 'en' }: { locale?: Locale }) {
   }
 
   const connectVoice = useCallback(async () => {
+    setMicDenied(false)
     setVoiceStatus('connecting')
     try {
       // Get a token from our API
-      const roomName = `qa-visitor-${Date.now()}`
+      // Room prefix tells the voice agent which language to use (contract: docs/RU-PATTERN.md)
+      const roomName = `qa-${locale === 'ru' ? 'ru-' : ''}visitor-${Date.now()}`
       const participantName = `visitor-${Math.random().toString(36).slice(2, 8)}`
       const tokenRes = await fetch('/api/livekit-token', {
         method: 'POST',
@@ -174,11 +175,13 @@ export function ChatWidget({ locale = 'en' }: { locale?: Locale }) {
       await room.localParticipant.setMicrophoneEnabled(true)
     } catch (e) {
       console.error('Voice connect error:', e)
+      const errName = e instanceof Error ? e.name : ''
+      setMicDenied(errName === 'NotAllowedError' || errName === 'SecurityError')
       setVoiceStatus('error')
       roomRef.current?.disconnect()
       roomRef.current = null
     }
-  }, [])
+  }, [locale])
 
   function disconnectVoice() {
     roomRef.current?.disconnect()
@@ -226,8 +229,7 @@ export function ChatWidget({ locale = 'en' }: { locale?: Locale }) {
                 <span className="text-text-secondary text-xs">{t.assistantSuffix}</span>
               </div>
               <div className="flex items-center gap-2">
-                {/* Mode toggle (voice is English-only for now) */}
-                {voiceEnabled && (
+                {/* Mode toggle */}
                   <button
                     onClick={() => mode === 'text' ? (setMode('voice'), connectVoice()) : switchToText()}
                     className="text-text-secondary hover:text-text-primary transition-colors"
@@ -235,7 +237,6 @@ export function ChatWidget({ locale = 'en' }: { locale?: Locale }) {
                   >
                     {mode === 'voice' ? <MicOff size={15} /> : <Mic size={15} />}
                   </button>
-                )}
                 <button
                   onClick={() => setOpen(false)}
                   className="text-text-secondary hover:text-text-primary transition-colors"
@@ -324,7 +325,6 @@ export function ChatWidget({ locale = 'en' }: { locale?: Locale }) {
                       className="flex-1 resize-none bg-transparent text-text-primary text-sm placeholder:text-text-secondary/50 focus:outline-none leading-relaxed py-1 max-h-24 overflow-y-auto"
                       style={{ fontFamily: 'var(--font-body)' }}
                     />
-                    {voiceEnabled && (
                       <button
                         onClick={() => { setMode('voice'); connectVoice() }}
                         disabled={loading}
@@ -335,7 +335,6 @@ export function ChatWidget({ locale = 'en' }: { locale?: Locale }) {
                       >
                         <Mic size={15} className="text-electric-blue" />
                       </button>
-                    )}
                     <button
                       onClick={send}
                       disabled={!input.trim() || loading}
@@ -348,7 +347,6 @@ export function ChatWidget({ locale = 'en' }: { locale?: Locale }) {
                   </div>
                   <p className="text-text-secondary/60 text-[10px] mt-2 text-center" style={{ fontFamily: 'var(--font-mono)' }}>
                     {t.hint}
-                    {voiceEnabled && (
                       <>
                         {' '}
                         <button
@@ -358,7 +356,6 @@ export function ChatWidget({ locale = 'en' }: { locale?: Locale }) {
                           {t.talkLink}
                         </button>
                       </>
-                    )}
                   </p>
                 </div>
               </>
@@ -418,7 +415,7 @@ export function ChatWidget({ locale = 'en' }: { locale?: Locale }) {
 
                 {voiceStatus === 'error' && (
                   <>
-                    <p className="text-red-400 text-sm text-center">{t.voiceError}</p>
+                    <p className="text-red-400 text-sm text-center">{micDenied ? t.micDenied : t.voiceError}</p>
                     <button
                       onClick={connectVoice}
                       className="px-4 py-2 rounded-lg text-sm text-space-black font-medium"
@@ -444,6 +441,13 @@ export function ChatWidget({ locale = 'en' }: { locale?: Locale }) {
                     </button>
                   </>
                 )}
+
+                <p className="text-text-secondary/70 text-[10px] leading-snug text-center max-w-[280px]">
+                  {t.voicePrivacy}{' '}
+                  <Link href={localeHref(locale, '/privacy')} className="underline text-electric-blue hover:brightness-125">
+                    {t.voicePrivacyLink}
+                  </Link>
+                </p>
               </div>
             )}
           </motion.div>

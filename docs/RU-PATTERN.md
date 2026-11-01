@@ -53,6 +53,21 @@ objects (TypeScript fails the build if one is missing). Page-specific copy goes 
 - Fonts: the Russian tree overrides `--font-display`; use `var(--font-display)` /
   `font-display` as the English pages do, never a hard-coded font name.
 
+## Voice: the `qa-ru-` room prefix contract
+
+The chat widget starts a LiveKit voice session by asking `/api/livekit-token` for a
+token for a room it names itself. The room name is how the voice agent
+(`infra/livekit-agent/agent.py`) knows which language to speak:
+
+- English pages: `qa-visitor-<timestamp>`
+- Russian pages (`locale === 'ru'`): `qa-ru-visitor-<timestamp>`
+
+`/api/livekit-token` only accepts `^qa-(ru-)?visitor-[A-Za-z0-9_-]{1,40}$` (anything else is
+a 400), limits each IP to 6 token requests per 10 minutes (429) and issues 15-minute tokens.
+If the agent ever needs a new language or room shape, change the regex in the route, the
+room name in `ChatWidget.tsx` and the agent together. All voice UI strings, including the
+voice privacy notice, live in `UiStrings.chat` in `src/lib/i18n.ts`.
+
 ## Checklist before merging a Russian page
 
 - [ ] `pnpm exec tsc --noEmit` and `pnpm build` pass; `/ru/<page>` is `○` (static)
