@@ -323,6 +323,16 @@ export function ChatWidget() {
                       style={{ fontFamily: 'var(--font-body)' }}
                     />
                     <button
+                      onClick={() => { setMode('voice'); connectVoice() }}
+                      disabled={loading}
+                      className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center border transition-all hover:brightness-125 disabled:opacity-40"
+                      style={{ borderColor: '#FFBF00', background: 'rgba(255,191,0,0.10)' }}
+                      aria-label="Talk to our voice assistant"
+                      title="Talk to our voice assistant"
+                    >
+                      <Mic size={15} className="text-electric-blue" />
+                    </button>
+                    <button
                       onClick={send}
                       disabled={!input.trim() || loading}
                       className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-all disabled:opacity-40 hover:brightness-110"
@@ -332,13 +342,13 @@ export function ChatWidget() {
                       <Send size={14} className="text-space-black" />
                     </button>
                   </div>
-                  <p className="text-text-secondary/40 text-[10px] mt-2 text-center" style={{ fontFamily: 'var(--font-mono)' }}>
+                  <p className="text-text-secondary/60 text-[10px] mt-2 text-center" style={{ fontFamily: 'var(--font-mono)' }}>
                     Enter to send · Shift+Enter for new line ·{' '}
                     <button
                       onClick={() => { setMode('voice'); connectVoice() }}
-                      className="underline hover:text-text-secondary/60"
+                      className="underline text-electric-blue hover:brightness-125"
                     >
-                      Switch to voice
+                      Talk to voice assistant
                     </button>
                   </p>
                 </div>
