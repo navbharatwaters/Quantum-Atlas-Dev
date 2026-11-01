@@ -1,0 +1,51 @@
+import type { ContactContent } from './contact.types'
+
+export const contactEn: ContactContent = {
+  eyebrow: 'Discovery Call',
+  heading: "Let's talk about what you're building",
+  intro:
+    'Not a sales call. A conversation about your specific challenge and whether we are the right fit to solve it. If we are not, we will tell you.',
+  bullets: [
+    '30-minute call — your time is respected',
+    'We review your current state and pain points',
+    'We share relevant production examples from our own systems',
+    'No obligation — we are selective about the work we take on',
+  ],
+  direct: { label: 'Direct contact', note: 'Response within 24 hours' },
+  form: {
+    name: 'Name',
+    namePlaceholder: 'Your name',
+    company: 'Company',
+    companyPlaceholder: 'Company name',
+    email: 'Work Email',
+    emailPlaceholder: 'you@company.com',
+    phone: 'Phone (optional)',
+    phonePlaceholder: '+91...',
+    service: 'Service Interested In',
+    servicePlaceholder: 'Select a service...',
+    services: [
+      { value: 'voice-ai', label: 'AI Voice Agents' },
+      { value: 'idp', label: 'Document Intelligence' },
+      { value: 'rag', label: 'Enterprise RAG' },
+      { value: 'saas', label: 'Custom SaaS Development' },
+      { value: 'automation', label: 'AI Automation' },
+      { value: 'content', label: 'Content & Video' },
+      { value: 'unsure', label: 'Not sure — tell us more' },
+    ],
+    message: 'Describe Your Challenge',
+    messagePlaceholder: 'What problem are you trying to solve? What have you tried so far?',
+    submit: 'Request a Discovery Call',
+    submitting: 'Submitting...',
+    footnote: 'We respond within 24 hours. No spam. No obligation.',
+    successTitle: 'Request received',
+    successBody: 'We will be in touch within 24 hours to schedule your call.',
+    errorGeneric: 'Something went wrong. Please email us directly at contact@quantumatlas.dev',
+    validation: {
+      name: 'Name must be at least 2 characters',
+      company: 'Company name required',
+      email: 'Valid email required',
+      service: 'Please select a service',
+      message: 'Please describe your challenge (min 20 characters)',
+    },
+  },
+}

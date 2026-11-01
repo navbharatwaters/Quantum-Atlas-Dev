@@ -3,6 +3,9 @@ import Link from 'next/link'
 import Script from 'next/script'
 import { motion } from 'framer-motion'
 import { ContentCard } from '@/components/shared/ContentCard'
+import { localeHref, type Locale } from '@/lib/i18n'
+import { enUrl, ruUrl } from '@/lib/site'
+import type { ServicePageData, ServiceUi } from '@/content/services.types'
 import {
   Accordion,
   AccordionContent,
@@ -10,26 +13,9 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 
-export interface ServicePageData {
-  slug: string
-  name: string
-  color: string // hex
-  colorName: string // for css class: 'electric-blue' | 'electric-blue' | 'electric-blue'
-  tagline: string
-  heroMetrics: { value: string; label: string }[]
-  problemHeading: string
-  problemBody: string
-  approachHeading: string
-  approachPoints: string[]
-  proofMetrics: { metric: string; before: string; after: string }[]
-  techStack: string[]
-  deploymentOptions: string[]
-  pricingNote: string
-  faqs: { q: string; a: string }[]
-  relatedServices: { name: string; href: string; color: string }[]
-}
-
 import type { Easing } from 'framer-motion'
+
+export type { ServicePageData }
 
 function fadeUp(delay = 0) {
   return {
@@ -40,7 +26,16 @@ function fadeUp(delay = 0) {
   }
 }
 
-export function ServicePageTemplate({ data }: { data: ServicePageData }) {
+export function ServicePageTemplate({
+  data,
+  ui,
+  locale = 'en',
+}: {
+  data: ServicePageData
+  ui: ServiceUi
+  locale?: Locale
+}) {
+  const contactHref = localeHref(locale, '/contact')
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -48,14 +43,18 @@ export function ServicePageTemplate({ data }: { data: ServicePageData }) {
         '@type': 'Service',
         name: data.name,
         description: data.tagline,
+        ...(locale === 'ru'
+          ? { url: ruUrl(`/services/${data.slug}`), inLanguage: 'ru' }
+          : {}),
         provider: {
           '@type': 'Organization',
           name: 'Quantum Atlas',
-          url: 'https://quantumatlas.dev',
+          url: locale === 'ru' ? ruUrl('/') : enUrl('/'),
         },
       },
       {
         '@type': 'FAQPage',
+        ...(locale === 'ru' ? { inLanguage: 'ru' } : {}),
         mainEntity: data.faqs.map((faq) => ({
           '@type': 'Question',
           name: faq.q,
@@ -106,11 +105,11 @@ export function ServicePageTemplate({ data }: { data: ServicePageData }) {
               ))}
             </div>
             <Link
-              href="/contact"
+              href={contactHref}
               className="inline-flex px-7 py-3 rounded-lg text-white font-semibold text-sm hover:brightness-110 transition-all"
               style={{ background: data.color, fontFamily: 'var(--font-display)' }}
             >
-              Discuss This Service
+              {ui.discussCta}
             </Link>
           </motion.div>
         </div>
@@ -124,7 +123,7 @@ export function ServicePageTemplate({ data }: { data: ServicePageData }) {
               className="text-[11px] tracking-[3px] uppercase mb-4 text-text-secondary"
               style={{ fontFamily: 'var(--font-mono)' }}
             >
-              The Problem
+              {ui.problemEyebrow}
             </p>
             <h2
               className="text-3xl font-bold text-text-primary mb-6"
@@ -145,7 +144,7 @@ export function ServicePageTemplate({ data }: { data: ServicePageData }) {
               className="text-[11px] tracking-[3px] uppercase mb-4"
               style={{ color: data.color, fontFamily: 'var(--font-mono)' }}
             >
-              Our Approach
+              {ui.approachEyebrow}
             </p>
             <h2
               className="text-3xl font-bold text-text-primary mb-8"
@@ -173,15 +172,15 @@ export function ServicePageTemplate({ data }: { data: ServicePageData }) {
               className="text-[11px] tracking-[3px] uppercase mb-8 text-text-secondary"
               style={{ fontFamily: 'var(--font-mono)' }}
             >
-              Production Proof
+              {ui.proofEyebrow}
             </p>
             <div className="border border-space-border rounded-xl overflow-hidden">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-space-border" style={{ background: '#171411' }}>
-                    <th className="text-left p-4 text-text-secondary font-medium">Metric</th>
-                    <th className="text-left p-4 text-text-secondary font-medium">Before</th>
-                    <th className="text-left p-4 font-medium" style={{ color: data.color }}>After</th>
+                    <th className="text-left p-4 text-text-secondary font-medium">{ui.colMetric}</th>
+                    <th className="text-left p-4 text-text-secondary font-medium">{ui.colBefore}</th>
+                    <th className="text-left p-4 font-medium" style={{ color: data.color }}>{ui.colAfter}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -207,7 +206,7 @@ export function ServicePageTemplate({ data }: { data: ServicePageData }) {
               className="text-[11px] tracking-[3px] uppercase mb-4 text-text-secondary"
               style={{ fontFamily: 'var(--font-mono)' }}
             >
-              Tech Stack
+              {ui.techStackEyebrow}
             </p>
             <div className="flex flex-wrap gap-2">
               {data.techStack.map((t) => (
@@ -226,7 +225,7 @@ export function ServicePageTemplate({ data }: { data: ServicePageData }) {
               className="text-[11px] tracking-[3px] uppercase mb-4 text-text-secondary"
               style={{ fontFamily: 'var(--font-mono)' }}
             >
-              Deployment Options
+              {ui.deploymentEyebrow}
             </p>
             <ul className="flex flex-col gap-3">
               {data.deploymentOptions.map((opt) => (
@@ -247,17 +246,17 @@ export function ServicePageTemplate({ data }: { data: ServicePageData }) {
               className="text-[11px] tracking-[3px] uppercase mb-4 text-gray-500"
               style={{ fontFamily: 'var(--font-mono)' }}
             >
-              Pricing
+              {ui.pricingEyebrow}
             </p>
             <p className="text-2xl font-semibold text-gray-900 mb-4" style={{ fontFamily: 'var(--font-display)' }}>
               {data.pricingNote}
             </p>
             <Link
-              href="/contact"
+              href={contactHref}
               className="inline-flex px-7 py-3 rounded-lg text-white font-semibold text-sm hover:brightness-110 transition-all"
               style={{ background: data.color, fontFamily: 'var(--font-display)' }}
             >
-              Get a Quote
+              {ui.quoteCta}
             </Link>
           </motion.div>
         </div>
@@ -271,7 +270,7 @@ export function ServicePageTemplate({ data }: { data: ServicePageData }) {
               className="text-[11px] tracking-[3px] uppercase mb-8 text-text-secondary"
               style={{ fontFamily: 'var(--font-mono)' }}
             >
-              Frequently Asked Questions
+              {ui.faqEyebrow}
             </p>
             <Accordion type="single" collapsible className="flex flex-col gap-2">
               {data.faqs.map((faq, i) => (
@@ -305,14 +304,15 @@ export function ServicePageTemplate({ data }: { data: ServicePageData }) {
               className="text-[11px] tracking-[3px] uppercase mb-8 text-text-secondary"
               style={{ fontFamily: 'var(--font-mono)' }}
             >
-              Related Services
+              {ui.relatedEyebrow}
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {data.relatedServices.map((svc) => (
                 <ContentCard
                   key={svc.href}
-                  href={svc.href}
+                  href={localeHref(locale, svc.href)}
                   title={svc.name}
+                  locale={locale}
                 />
               ))}
             </div>
@@ -328,17 +328,17 @@ export function ServicePageTemplate({ data }: { data: ServicePageData }) {
               className="text-3xl font-bold text-text-primary mb-4"
               style={{ fontFamily: 'var(--font-display)' }}
             >
-              Ready to discuss {data.name}?
+              {ui.finalHeading.replace('{name}', data.name)}
             </h2>
             <p className="text-text-secondary mb-8">
-              30-minute call. We review your current state and share relevant production examples.
+              {ui.finalBody}
             </p>
             <Link
-              href="/contact"
+              href={contactHref}
               className="inline-flex px-8 py-4 rounded-lg text-white font-semibold hover:brightness-110 transition-all"
               style={{ background: data.color, fontFamily: 'var(--font-display)' }}
             >
-              Book a Discovery Call
+              {ui.finalCta}
             </Link>
           </motion.div>
         </div>

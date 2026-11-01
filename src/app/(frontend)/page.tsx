@@ -10,8 +10,10 @@ import { Industries } from '@/components/sections/Industries'
 import { TechStack } from '@/components/sections/TechStack'
 import { KnowledgePreview } from '@/components/sections/KnowledgePreview'
 import { CTASection } from '@/components/sections/CTASection'
+import { pageAlternates } from '@/lib/i18n'
 
 export const metadata: Metadata = {
+  alternates: pageAlternates('en', '/'),
   title: 'Quantum Atlas — Production-Grade AI Implementation',
   description: 'Enterprise AI implementation — voice agents at $0.08/min, document intelligence, RAG systems and custom SaaS. Self-hosted. Production-proven.',
   openGraph: {

@@ -9,7 +9,44 @@ const schema = z.object({
   phone: z.string().optional(),
   service: z.string().min(1),
   message: z.string().min(20),
+  locale: z.enum(['en', 'ru']).optional(),
 })
+
+// Email text for Russian submissions (internal notification to the team; English stays unchanged).
+const RU_SERVICE_LABELS: Record<string, string> = {
+  'voice-ai': 'Голосовые ИИ-агенты',
+  'idp': 'Интеллектуальная обработка документов',
+  'rag': 'Корпоративный RAG',
+  'saas': 'SaaS на заказ',
+  'automation': 'ИИ-автоматизация',
+  'content': 'Контент и видео',
+  'unsure': 'Пока не знаю — расскажите подробнее',
+}
+
+const EMAIL_TEXT = {
+  en: {
+    subject: (n: string, c: string, s: string) => `New enquiry: ${n} at ${c} — ${s}`,
+    title: 'New Discovery Call Request',
+    name: 'Name',
+    company: 'Company',
+    email: 'Email',
+    phone: 'Phone',
+    service: 'Service',
+    message: 'Message',
+    footer: (n: string) => `Submitted via quantumatlas.dev/contact · Reply to this email to respond directly to ${n}.`,
+  },
+  ru: {
+    subject: (n: string, c: string, s: string) => `Новая заявка: ${n}, ${c} — ${s}`,
+    title: 'Новая заявка на консультацию',
+    name: 'Имя',
+    company: 'Компания',
+    email: 'E-mail',
+    phone: 'Телефон',
+    service: 'Услуга',
+    message: 'Сообщение',
+    footer: (n: string) => `Отправлено со страницы /ru/contact · Ответьте на это письмо, чтобы написать напрямую: ${n}.`,
+  },
+} as const
 
 const SERVICE_LABELS: Record<string, string> = {
   'voice-ai': 'AI Voice Agents',
@@ -40,7 +77,9 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const data = schema.parse(body)
 
-    const serviceLabel = SERVICE_LABELS[data.service] ?? data.service
+    const t = EMAIL_TEXT[data.locale === 'ru' ? 'ru' : 'en']
+    const labels = data.locale === 'ru' ? RU_SERVICE_LABELS : SERVICE_LABELS
+    const serviceLabel = labels[data.service] ?? data.service
     const toEmail = process.env.CONTACT_EMAIL ?? 'contact@quantumatlas.dev'
 
     // Send email via Namecheap SMTP
@@ -50,24 +89,24 @@ export async function POST(req: NextRequest) {
         from: `"Quantum Atlas Website" <${process.env.SMTP_USER}>`,
         to: toEmail,
         replyTo: `"${data.name}" <${data.email}>`,
-        subject: `New enquiry: ${data.name} at ${data.company} — ${serviceLabel}`,
+        subject: t.subject(data.name, data.company, serviceLabel),
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px;">
-            <h2 style="color: #FFBF00; margin-top: 0;">New Discovery Call Request</h2>
+            <h2 style="color: #FFBF00; margin-top: 0;">${t.title}</h2>
             <table style="width: 100%; border-collapse: collapse;">
-              <tr><td style="padding: 8px 0; color: #888; width: 140px;">Name</td><td style="padding: 8px 0; font-weight: bold;">${data.name}</td></tr>
-              <tr><td style="padding: 8px 0; color: #888;">Company</td><td style="padding: 8px 0; font-weight: bold;">${data.company}</td></tr>
-              <tr><td style="padding: 8px 0; color: #888;">Email</td><td style="padding: 8px 0;"><a href="mailto:${data.email}" style="color: #FFBF00;">${data.email}</a></td></tr>
-              <tr><td style="padding: 8px 0; color: #888;">Phone</td><td style="padding: 8px 0;">${data.phone ?? '—'}</td></tr>
-              <tr><td style="padding: 8px 0; color: #888;">Service</td><td style="padding: 8px 0;">${serviceLabel}</td></tr>
+              <tr><td style="padding: 8px 0; color: #888; width: 140px;">${t.name}</td><td style="padding: 8px 0; font-weight: bold;">${data.name}</td></tr>
+              <tr><td style="padding: 8px 0; color: #888;">${t.company}</td><td style="padding: 8px 0; font-weight: bold;">${data.company}</td></tr>
+              <tr><td style="padding: 8px 0; color: #888;">${t.email}</td><td style="padding: 8px 0;"><a href="mailto:${data.email}" style="color: #FFBF00;">${data.email}</a></td></tr>
+              <tr><td style="padding: 8px 0; color: #888;">${t.phone}</td><td style="padding: 8px 0;">${data.phone ?? '—'}</td></tr>
+              <tr><td style="padding: 8px 0; color: #888;">${t.service}</td><td style="padding: 8px 0;">${serviceLabel}</td></tr>
             </table>
             <hr style="border: none; border-top: 1px solid #333; margin: 16px 0;" />
-            <p style="color: #888; margin-bottom: 4px;">Message</p>
+            <p style="color: #888; margin-bottom: 4px;">${t.message}</p>
             <p style="background: #f5f5f5; padding: 16px; border-radius: 6px; white-space: pre-wrap;">${data.message}</p>
-            <p style="color: #aaa; font-size: 12px; margin-top: 24px;">Submitted via quantumatlas.dev/contact · Reply to this email to respond directly to ${data.name}.</p>
+            <p style="color: #aaa; font-size: 12px; margin-top: 24px;">${t.footer(data.name)}</p>
           </div>
         `,
-        text: `New Discovery Call Request\n\nName: ${data.name}\nCompany: ${data.company}\nEmail: ${data.email}\nPhone: ${data.phone ?? '—'}\nService: ${serviceLabel}\n\nMessage:\n${data.message}`,
+        text: `${t.title}\n\n${t.name}: ${data.name}\n${t.company}: ${data.company}\n${t.email}: ${data.email}\n${t.phone}: ${data.phone ?? '—'}\n${t.service}: ${serviceLabel}\n\n${t.message}:\n${data.message}`,
       })
     } else {
       console.warn('SMTP credentials not set — email not sent')
@@ -86,7 +125,7 @@ export async function POST(req: NextRequest) {
           phone: data.phone,
           service: data.service,
           message: data.message,
-          source: '/contact',
+          source: data.locale === 'ru' ? '/ru/contact' : '/contact',
         }),
       })
       if (!payloadRes.ok) console.error('Payload save failed:', await payloadRes.text())

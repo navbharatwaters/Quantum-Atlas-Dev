@@ -10,9 +10,11 @@ interface ContentCardProps {
   description?: string
   /** Secondary mono info rendered below description (e.g. service tagline) */
   meta?: string
+  /** 'ru' renders the link text in Russian */
+  locale?: 'en' | 'ru'
 }
 
-export function ContentCard({ href, icon, label, title, description, meta }: ContentCardProps) {
+export function ContentCard({ href, icon, label, title, description, meta, locale = 'en' }: ContentCardProps) {
   return (
     <Link
       href={href}
@@ -50,7 +52,7 @@ export function ContentCard({ href, icon, label, title, description, meta }: Con
         </p>
       )}
       <p className="mt-auto pt-4 text-[14px] font-medium" style={{ color: '#FFBF00' }}>
-        Learn more{' '}
+        {locale === 'ru' ? 'Подробнее' : 'Learn more'}{' '}
         <span
           className="inline-block transition-transform motion-safe:group-hover:translate-x-1"
           aria-hidden="true"

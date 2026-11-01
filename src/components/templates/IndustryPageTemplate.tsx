@@ -3,31 +3,35 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import Script from 'next/script'
 import { ContentCard } from '@/components/shared/ContentCard'
+import { localeHref, type Locale } from '@/lib/i18n'
+import { enUrl, ruUrl } from '@/lib/site'
+import { getIndustries, type IndustryPageContent } from '@/content/industries'
 
-export interface IndustryPageData {
-  id: string
-  name: string
-  heroHeadline: string
-  heroSubtext: string
-  challenges: { title: string; body: string }[]
-  services: { name: string; href: string; color: string; relevance: string }[]
-  compliance: { title: string; body: string }[]
-  activeWork: { sector: string; outcome: string; color: string } | null
-  ctaHeadline: string
-}
+export type IndustryPageData = IndustryPageContent
 
-export function IndustryPageTemplate({ data }: { data: IndustryPageData }) {
+export function IndustryPageTemplate({
+  data,
+  slug,
+  locale = 'en',
+}: {
+  data: IndustryPageData
+  slug: string
+  locale?: Locale
+}) {
+  const ui = getIndustries(locale).ui
+  const path = `/industries/${slug}`
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: `AI for ${data.name}`,
+    name: ui.jsonLdName(data.name),
     description: data.heroSubtext,
     provider: {
       '@type': 'Organization',
       name: 'Quantum Atlas',
-      url: 'https://quantumatlas.dev',
+      url: enUrl('/'),
     },
     areaServed: 'India',
+    ...(locale === 'ru' ? { url: ruUrl(path), inLanguage: 'ru' } : {}),
   }
 
   return (
@@ -67,7 +71,7 @@ export function IndustryPageTemplate({ data }: { data: IndustryPageData }) {
             transition={{ duration: 0.6 }}
           >
             <p className="text-[11px] tracking-[3px] uppercase mb-8 text-text-secondary" style={{ fontFamily: 'var(--font-mono)' }}>
-              Industry Challenges
+              {ui.challengesLabel}
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {data.challenges.map((c, i) => (
@@ -93,15 +97,16 @@ export function IndustryPageTemplate({ data }: { data: IndustryPageData }) {
             transition={{ duration: 0.6 }}
           >
             <p className="text-[11px] tracking-[3px] uppercase mb-8 text-text-secondary" style={{ fontFamily: 'var(--font-mono)' }}>
-              Services for {data.name}
+              {ui.servicesLabel(data.name)}
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {data.services.map((svc) => (
                 <ContentCard
                   key={svc.href}
-                  href={svc.href}
+                  href={localeHref(locale, svc.href)}
                   title={svc.name}
                   description={svc.relevance}
+                  locale={locale}
                 />
               ))}
             </div>
@@ -119,7 +124,7 @@ export function IndustryPageTemplate({ data }: { data: IndustryPageData }) {
             transition={{ duration: 0.6 }}
           >
             <p className="text-[11px] tracking-[3px] uppercase mb-8 text-text-secondary" style={{ fontFamily: 'var(--font-mono)' }}>
-              Compliance &amp; Requirements
+              {ui.complianceLabel}
             </p>
             <div className="flex flex-col gap-4">
               {data.compliance.map((c, i) => (
@@ -146,7 +151,7 @@ export function IndustryPageTemplate({ data }: { data: IndustryPageData }) {
               transition={{ duration: 0.6 }}
             >
               <p className="text-[11px] tracking-[3px] uppercase mb-6 text-text-secondary" style={{ fontFamily: 'var(--font-mono)' }}>
-                Active Work in This Sector
+                {ui.activeWorkLabel}
               </p>
               <div
                 className="p-8 rounded-xl border border-space-border"
@@ -156,7 +161,7 @@ export function IndustryPageTemplate({ data }: { data: IndustryPageData }) {
                   className="inline-flex px-2 py-0.5 rounded-full text-[10px] font-medium mb-4"
                   style={{ background: '#FFBF0015', color: '#FFBF00', fontFamily: 'var(--font-mono)' }}
                 >
-                  Active
+                  {ui.activeBadge}
                 </span>
                 <p className="text-text-secondary text-[11px] tracking-wider uppercase mb-2" style={{ fontFamily: 'var(--font-mono)' }}>
                   {data.activeWork.sector}
@@ -181,14 +186,14 @@ export function IndustryPageTemplate({ data }: { data: IndustryPageData }) {
               {data.ctaHeadline}
             </h2>
             <p className="text-text-secondary mb-8">
-              30 minutes. We review your specific challenge and show you relevant production examples.
+              {ui.ctaBody}
             </p>
             <Link
-              href="/contact"
+              href={localeHref(locale, '/contact')}
               className="inline-flex px-8 py-4 rounded-lg bg-electric-blue text-white font-semibold hover:brightness-110 transition-all"
               style={{ fontFamily: 'var(--font-display)' }}
             >
-              Book a Discovery Call
+              {ui.ctaButton}
             </Link>
           </motion.div>
         </div>

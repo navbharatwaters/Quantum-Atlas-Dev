@@ -3,81 +3,18 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Phone, Brain, Bot, FileText, ArrowDown } from 'lucide-react'
 
-const services = [
-  {
-    id: 'voice',
-    color: '#FFBF00',
-    badge: 'VOICE',
-    label: 'AI Voice Agents',
-    heading: 'Voice AI at a tenth of the cost',
-    description:
-      'Enterprise inbound and outbound voice agents with native Indian carrier integration. Self-hosted. No Twilio. No ElevenLabs.',
-    bullets: [
-      'Airtel + Jio SIP integration — no third-party carrier markup',
-      '$0.08/minute end-to-end cost — verified over 4 months production',
-      'RAG-powered agents — know your business, not just scripts',
-      'Grafana + Prometheus observability — every call logged',
-      '4 months in production at Navbharat Shipping',
-    ],
-    href: '/services/ai-voice-agents',
-    bg: '#12100D',
-  },
-  {
-    id: 'idp',
-    color: '#FFBF00',
-    badge: 'IDP',
-    label: 'Document Intelligence',
-    heading: 'Hundreds of documents. Minutes, not days.',
-    description:
-      'Bulk intelligent document processing with domain fine-tuning. Three times cheaper than Nanonets. On-premise available.',
-    bullets: [
-      '$0.08 per page — vs $0.30 at Nanonets',
-      'Contract clause extraction and risk flagging',
-      'Fine-tuned models for your document types',
-      'Bulk processing pipeline — hundreds in minutes',
-      'On-premise deployment for data sovereignty',
-    ],
-    href: '/services/document-intelligence',
-    bg: '#0C0A08',
-  },
-  {
-    id: 'rag',
-    color: '#FFBF00',
-    badge: 'RAG',
-    label: 'Enterprise RAG',
-    heading: 'Knowledge systems governments trust',
-    description:
-      'Hybrid retrieval — BM25 + vector + graph — all on PostgreSQL. Citations on every answer. On-premise. SOC2-grade architecture.',
-    bullets: [
-      'Hybrid retrieval — keyword + semantic + graph',
-      'Every answer cites the source document',
-      'Multi-tenant with complete data isolation',
-      'On-premise deployment — no data leaves your servers',
-      'Langfuse observability — full audit trail',
-    ],
-    href: '/services/enterprise-rag',
-    bg: '#12100D',
-  },
-  {
-    id: 'saas',
-    color: '#FFBF00',
-    badge: 'SAAS',
-    label: 'Custom SaaS Development',
-    heading: 'Replace your ERP. Own your platform.',
-    description:
-      'Production-grade multi-tenant SaaS built for your exact workflow. Not a template. Not a customized off-the-shelf product.',
-    bullets: [
-      'Full multi-tenancy with row-level security',
-      'Clerk auth + Stripe billing built in',
-      'Self-hosted — you own everything',
-      'Proven: replaced a costly legacy ERP with iKargos',
-      'API-first — integrates with anything',
-    ],
-    href: '/services/saas-development',
-    bg: '#0C0A08',
-  },
-]
+import { getHome } from '@/content/home'
+import { localeHref, type Locale } from '@/lib/i18n'
 
+// Presentation only (colours, background, badge); copy lives in src/content/home.<locale>.ts
+const SERVICE_STYLE: Record<string, { color: string; badge: string; bg: string }> = {
+  voice: { color: '#FFBF00', badge: 'VOICE', bg: '#12100D' },
+  idp: { color: '#FFBF00', badge: 'IDP', bg: '#0C0A08' },
+  rag: { color: '#FFBF00', badge: 'RAG', bg: '#12100D' },
+  saas: { color: '#FFBF00', badge: 'SAAS', bg: '#0C0A08' },
+}
+
+type VisualLabels = { query: string; processed: string; answerCite: string }
 // ─── Visual: Voice AI ─────────────────────────────────────────────────────────
 function VoiceVisual({ color }: { color: string }) {
   const icons = [Phone, Brain, Bot]
@@ -107,7 +44,7 @@ function VoiceVisual({ color }: { color: string }) {
 }
 
 // ─── Visual: Document Intelligence ───────────────────────────────────────────
-function DocVisual({ color }: { color: string }) {
+function DocVisual({ color, labels }: { color: string; labels: VisualLabels }) {
   return (
     <DiagramCard badge="IDP" color={color}>
       <div className="flex items-center justify-center gap-2">
@@ -127,7 +64,7 @@ function DocVisual({ color }: { color: string }) {
           className="px-5 py-2 rounded-lg text-[12px] font-mono font-semibold tracking-widest"
           style={{ background: `${color}18`, color, border: `1px solid ${color}50` }}
         >
-          PROCESSED
+          {labels.processed}
         </div>
       </div>
     </DiagramCard>
@@ -135,13 +72,13 @@ function DocVisual({ color }: { color: string }) {
 }
 
 // ─── Visual: Enterprise RAG ───────────────────────────────────────────────────
-function RagVisual({ color }: { color: string }) {
+function RagVisual({ color, labels }: { color: string; labels: VisualLabels }) {
   return (
     <DiagramCard badge="RAG" color={color}>
       <div className="flex flex-col gap-3">
         {/* Row 1 */}
         <div className="flex items-center justify-center gap-2">
-          <DiagramBox label="QUERY" color={color} />
+          <DiagramBox label={labels.query} color={color} />
           <span style={{ color: `${color}50` }} className="text-lg">→</span>
           <DiagramBox label="BM25" color={color} />
           <DiagramBox label="VECTOR" color={color} />
@@ -155,7 +92,7 @@ function RagVisual({ color }: { color: string }) {
         <div className="flex items-center justify-center gap-2">
           <DiagramBox label="RERANK" color={color} wide />
           <span style={{ color: `${color}50` }} className="text-lg">→</span>
-          <DiagramBox label="ANSWER + CITE" color={color} wide />
+          <DiagramBox label={labels.answerCite} color={color} wide />
         </div>
       </div>
     </DiagramCard>
@@ -255,16 +192,18 @@ function DiagramBox({
 }
 
 // ─── Visual selector ──────────────────────────────────────────────────────────
-function ServiceVisual({ id, color }: { id: string; color: string }) {
+function ServiceVisual({ id, color, labels }: { id: string; color: string; labels: VisualLabels }) {
   if (id === 'voice') return <VoiceVisual color={color} />
-  if (id === 'idp')   return <DocVisual color={color} />
-  if (id === 'rag')   return <RagVisual color={color} />
+  if (id === 'idp')   return <DocVisual color={color} labels={labels} />
+  if (id === 'rag')   return <RagVisual color={color} labels={labels} />
   if (id === 'saas')  return <SaasVisual color={color} />
   return null
 }
 
 // ─── Main export ──────────────────────────────────────────────────────────────
-export function ServicesDeepDive() {
+export function ServicesDeepDive({ locale = 'en' }: { locale?: Locale }) {
+  const c = getHome(locale).deepDive
+  const services = c.items.map((item) => ({ ...item, ...SERVICE_STYLE[item.id] }))
   return (
     <div>
       {services.map((svc, i) => (
@@ -313,7 +252,7 @@ export function ServicesDeepDive() {
                 ))}
               </ul>
               <Link
-                href={svc.href}
+                href={localeHref(locale, svc.href)}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border text-sm font-medium transition-all hover:opacity-80"
                 style={{
                   borderColor: svc.color,
@@ -321,7 +260,7 @@ export function ServicesDeepDive() {
                   fontFamily: 'var(--font-display)',
                 }}
               >
-                Discuss This Service →
+                {c.cta}
               </Link>
             </motion.div>
 
@@ -333,7 +272,7 @@ export function ServicesDeepDive() {
               viewport={{ once: true, margin: '-80px' }}
               transition={{ duration: 0.8, ease: 'easeOut', delay: 0.12 }}
             >
-              <ServiceVisual id={svc.id} color={svc.color} />
+              <ServiceVisual id={svc.id} color={svc.color} labels={c.visuals} />
             </motion.div>
           </div>
         </section>

@@ -1,41 +1,24 @@
 import Link from 'next/link'
+import { getUi, localeHref, type Locale } from '@/lib/i18n'
+import { RU_CONTACT } from '@/lib/contact'
 
-const serviceLinks = [
-  { label: 'AI Voice Agents', href: '/services/ai-voice-agents' },
-  { label: 'Document Intelligence', href: '/services/document-intelligence' },
-  { label: 'Enterprise RAG', href: '/services/enterprise-rag' },
-  { label: 'Custom SaaS Dev', href: '/services/saas-development' },
-  { label: 'AI Automation', href: '/services/ai-automation' },
-  { label: 'Content & Video', href: '/services/content-video' },
-]
+export function Footer({ locale = 'en' }: { locale?: Locale }) {
+  const ui = getUi(locale)
+  const f = ui.footer
+  const serviceLinks = ui.serviceItems.map((s, i) => ({ label: f.serviceLabels[i], href: s.href }))
+  const linkClass = 'text-text-secondary text-sm hover:text-text-primary transition-colors'
 
-const industryLinks = [
-  { label: 'Government', href: '/industries/government' },
-  { label: 'Logistics & Shipping', href: '/industries/logistics-shipping' },
-  { label: 'Fintech & BFSI', href: '/industries/fintech-bfsi' },
-  { label: 'Legal', href: '/industries/legal' },
-  { label: 'Manufacturing', href: '/industries/manufacturing' },
-  { label: 'Healthcare', href: '/industries/healthcare' },
-]
+  const columns = [
+    { title: f.services, links: serviceLinks },
+    { title: f.industries, links: f.industryLinks },
+    { title: f.company, links: f.companyLinks },
+    { title: f.legal, links: f.legalLinks },
+  ]
 
-const companyLinks = [
-  { label: 'About', href: '/about' },
-  { label: 'Blog', href: '/blog' },
-  { label: 'Knowledge Hub', href: '/knowledge' },
-  { label: 'Case Studies', href: '/knowledge/case-studies' },
-  { label: 'Contact', href: '/contact' },
-]
-
-const legalLinks = [
-  { label: 'Privacy Policy', href: '/privacy' },
-  { label: 'Terms of Service', href: '/terms' },
-]
-
-export function Footer() {
   return (
     <footer
       className="bg-space-black border-t border-space-border"
-      aria-label="Site footer"
+      aria-label={f.ariaLabel}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
         {/* Top section */}
@@ -43,106 +26,68 @@ export function Footer() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <Link
-              href="/"
+              href={localeHref(locale, '/')}
               className="text-text-primary font-display font-semibold text-lg tracking-wide block mb-4 hover:text-electric-blue transition-colors"
             >
               QUANTUM ATLAS
             </Link>
             <p className="text-text-secondary text-sm leading-relaxed">
-              Production-grade AI for enterprises. Every system runs in our own
-              companies before we sell it.
+              {f.tagline}
             </p>
           </div>
 
-          {/* Services */}
-          <div className="lg:col-span-1">
-            <h3 className="text-text-primary text-sm font-semibold mb-4 uppercase tracking-wider">
-              Services
-            </h3>
-            <ul className="space-y-2.5">
-              {serviceLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-text-secondary text-sm hover:text-text-primary transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Industries */}
-          <div className="lg:col-span-1">
-            <h3 className="text-text-primary text-sm font-semibold mb-4 uppercase tracking-wider">
-              Industries
-            </h3>
-            <ul className="space-y-2.5">
-              {industryLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-text-secondary text-sm hover:text-text-primary transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Company */}
-          <div className="lg:col-span-1">
-            <h3 className="text-text-primary text-sm font-semibold mb-4 uppercase tracking-wider">
-              Company
-            </h3>
-            <ul className="space-y-2.5">
-              {companyLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-text-secondary text-sm hover:text-text-primary transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Legal */}
-          <div className="lg:col-span-1">
-            <h3 className="text-text-primary text-sm font-semibold mb-4 uppercase tracking-wider">
-              Legal
-            </h3>
-            <ul className="space-y-2.5">
-              {legalLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-text-secondary text-sm hover:text-text-primary transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {columns.map((col) => (
+            <div key={col.title} className="lg:col-span-1">
+              <h3 className="text-text-primary text-sm font-semibold mb-4 uppercase tracking-wider">
+                {col.title}
+              </h3>
+              <ul className="space-y-2.5">
+                {col.links.map((link) => (
+                  <li key={link.href}>
+                    <Link href={localeHref(locale, link.href)} className={linkClass}>
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
         {/* Bottom bar */}
         <div className="border-t border-space-border pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-text-secondary text-sm">
-            &copy; 2026 Quantum Atlas. All rights reserved.
+            {f.copyright}
           </p>
-          <a
-            href="mailto:contact@quantumatlas.dev"
-            className="text-text-secondary text-sm hover:text-text-primary transition-colors"
-            style={{ fontFamily: 'var(--font-mono)' }}
-          >
-            contact@quantumatlas.dev
-          </a>
+          {locale === 'ru' ? (
+            <div className="flex flex-col sm:flex-row items-center gap-x-6 gap-y-1 text-center">
+              <span className="text-text-secondary text-sm">
+                {f.contactPerson}: {RU_CONTACT.person}
+              </span>
+              <a
+                href={RU_CONTACT.phoneHref}
+                className={linkClass}
+                style={{ fontFamily: 'var(--font-mono)' }}
+              >
+                {RU_CONTACT.phoneDisplay}
+              </a>
+              <a
+                href={`mailto:${RU_CONTACT.email}`}
+                className={linkClass}
+                style={{ fontFamily: 'var(--font-mono)' }}
+              >
+                {RU_CONTACT.email}
+              </a>
+            </div>
+          ) : (
+            <a
+              href="mailto:contact@quantumatlas.dev"
+              className={linkClass}
+              style={{ fontFamily: 'var(--font-mono)' }}
+            >
+              contact@quantumatlas.dev
+            </a>
+          )}
         </div>
       </div>
     </footer>

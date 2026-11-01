@@ -6,54 +6,56 @@ import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { Menu, X, ChevronDown } from 'lucide-react'
 
-const services = [
-  {
-    label: 'AI Voice Agents',
-    href: '/services/ai-voice-agents',
-    color: 'border-electric-blue',
-    description: 'Website and phone voice agents on infrastructure you control',
-  },
-  {
-    label: 'Document Intelligence',
-    href: '/services/document-intelligence',
-    color: 'border-electric-blue',
-    description: 'Extraction, checking and routing for document-heavy teams',
-  },
-  {
-    label: 'Enterprise RAG',
-    href: '/services/enterprise-rag',
-    color: 'border-electric-blue',
-    description: 'Knowledge systems with a citation on every answer',
-  },
-  {
-    label: 'Custom SaaS Dev',
-    href: '/services/saas-development',
-    color: 'border-electric-blue',
-    description: 'Multi-tenant products built end to end',
-  },
-  {
-    label: 'AI Automation',
-    href: '/services/ai-automation',
-    color: 'border-electric-blue',
-    description: 'Workflows and agents wired into your systems',
-  },
-  {
-    label: 'Content & Video',
-    href: '/services/content-video',
-    color: 'border-electric-blue',
-    description: 'Avatar and video production, supporting service',
-  },
-]
+import { getUi, localeHref, switcherHref, logicalPath, type Locale } from '@/lib/i18n'
 
-const navLinks = [
-  { label: 'Industries', href: '/industries' },
-  { label: 'Work', href: '/knowledge/case-studies' },
-  { label: 'Knowledge', href: '/knowledge' },
-  { label: 'About', href: '/about' },
-  { label: 'Blog', href: '/blog' },
-]
-
-export function Navbar() {
+function LangSwitch({
+  locale,
+  pathname,
+  label,
+  className,
+}: {
+  locale: Locale
+  pathname: string
+  label: string
+  className?: string
+}) {
+  return (
+    <div
+      role="group"
+      aria-label={label}
+      className={cn('flex items-center gap-1.5 text-xs font-medium', className)}
+      style={{ fontFamily: 'var(--font-mono)' }}
+    >
+      {(['en', 'ru'] as const).map((l, i) => (
+        <span key={l} className="flex items-center gap-1.5">
+          {i > 0 && <span className="text-text-dim" aria-hidden="true">|</span>}
+          <Link
+            href={switcherHref(l, pathname)}
+            hrefLang={l}
+            lang={l}
+            aria-current={l === locale ? 'true' : undefined}
+            className={cn(
+              'uppercase transition-colors',
+              l === locale ? 'text-electric-blue' : 'text-text-secondary hover:text-text-primary'
+            )}
+          >
+            {l}
+          </Link>
+        </span>
+      ))}
+    </div>
+  )
+}
+export function Navbar({ locale = 'en' }: { locale?: Locale }) {
+  const ui = getUi(locale)
+  const services = ui.serviceItems.map((s) => ({ ...s, color: 'border-electric-blue' }))
+  const navLinks = [
+    { label: ui.nav.industries, href: '/industries' },
+    { label: ui.nav.work, href: '/knowledge/case-studies' },
+    { label: ui.nav.knowledge, href: '/knowledge' },
+    { label: ui.nav.about, href: '/about' },
+    { label: ui.nav.blog, href: '/blog' },
+  ]
   const [scrolled, setScrolled] = useState(false)
   const [servicesOpen, setServicesOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -109,7 +111,7 @@ export function Navbar() {
         <nav className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between h-16">
           {/* Logo */}
           <Link
-            href="/"
+            href={localeHref(locale, '/')}
             className="text-text-primary font-display font-semibold text-lg tracking-wide hover:text-electric-blue transition-colors"
           >
             QUANTUM ATLAS
@@ -128,7 +130,7 @@ export function Navbar() {
                 )}
                 aria-expanded={servicesOpen}
               >
-                Services
+                {ui.nav.services}
                 <ChevronDown
                   size={15}
                   className={cn('transition-transform duration-200', servicesOpen && 'rotate-180')}
@@ -143,7 +145,7 @@ export function Navbar() {
                   {services.map((service) => (
                     <Link
                       key={service.href}
-                      href={service.href}
+                      href={localeHref(locale, service.href)}
                       className={cn(
                         'flex flex-col gap-0.5 p-3 rounded-lg border-l-2 hover:bg-space-dark transition-colors',
                         service.color
@@ -163,10 +165,10 @@ export function Navbar() {
             {navLinks.map((link) => (
               <Link
                 key={link.href}
-                href={link.href}
+                href={localeHref(locale, link.href)}
                 className={cn(
                   'text-sm font-medium transition-colors',
-                  pathname.startsWith(link.href)
+                  logicalPath(pathname).startsWith(link.href)
                     ? 'text-text-primary'
                     : 'text-text-secondary hover:text-text-primary'
                 )}
@@ -178,18 +180,19 @@ export function Navbar() {
 
           {/* CTA + mobile menu */}
           <div className="flex items-center gap-4">
+            <LangSwitch locale={locale} pathname={pathname} label={ui.nav.language} className="hidden lg:flex" />
             <Link
-              href="/contact"
+              href={localeHref(locale, '/contact')}
               className="hidden lg:inline-flex items-center px-4 py-2 rounded-lg bg-electric-blue text-space-black text-sm font-medium hover:brightness-110 transition-all"
             >
-              Book a Call
+              {ui.nav.bookCall}
             </Link>
 
             {/* Mobile hamburger */}
             <button
               className="lg:hidden text-text-secondary hover:text-text-primary transition-colors"
               onClick={() => setMobileOpen((v) => !v)}
-              aria-label="Toggle menu"
+              aria-label={ui.nav.toggleMenu}
             >
               {mobileOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
@@ -212,7 +215,7 @@ export function Navbar() {
               <button
                 onClick={() => setMobileOpen(false)}
                 className="text-text-secondary hover:text-text-primary"
-                aria-label="Close menu"
+                aria-label={ui.nav.closeMenu}
               >
                 <X size={20} />
               </button>
@@ -224,7 +227,7 @@ export function Navbar() {
                 onClick={() => setMobileServicesOpen((v) => !v)}
                 className="flex items-center justify-between w-full px-3 py-2.5 rounded-lg text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-space-dark transition-colors"
               >
-                Services
+                {ui.nav.services}
                 <ChevronDown
                   size={15}
                   className={cn('transition-transform duration-200', mobileServicesOpen && 'rotate-180')}
@@ -236,7 +239,7 @@ export function Navbar() {
                   {services.map((service) => (
                     <Link
                       key={service.href}
-                      href={service.href}
+                      href={localeHref(locale, service.href)}
                       className={cn(
                         'px-3 py-2 rounded-lg border-l-2 text-sm text-text-secondary hover:text-text-primary hover:bg-space-dark transition-colors',
                         service.color
@@ -251,7 +254,7 @@ export function Navbar() {
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
-                  href={link.href}
+                  href={localeHref(locale, link.href)}
                   className="px-3 py-2.5 rounded-lg text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-space-dark transition-colors"
                 >
                   {link.label}
@@ -260,11 +263,12 @@ export function Navbar() {
             </nav>
 
             <div className="px-4 pb-6">
+              <LangSwitch locale={locale} pathname={pathname} label={ui.nav.language} className="justify-center mb-4" />
               <Link
-                href="/contact"
+                href={localeHref(locale, '/contact')}
                 className="flex items-center justify-center w-full px-4 py-3 rounded-lg bg-electric-blue text-white text-sm font-medium hover:bg-electric-blue/90 transition-colors"
               >
-                Book a Call
+                {ui.nav.bookCall}
               </Link>
             </div>
           </div>

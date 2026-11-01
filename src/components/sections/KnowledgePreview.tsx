@@ -3,32 +3,11 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 
-// Placeholder blog posts — will be replaced by CMS data
-const placeholderPosts = [
-  {
-    title: 'How We Built a Voice Agent at $0.08/min — Full Technical Breakdown',
-    category: 'Technical Deep Dive',
-    readTime: 12,
-    date: 'Apr 2026',
-    href: '/blog',
-  },
-  {
-    title: 'Why We Chose PostgreSQL Over Pinecone for RAG — And What Happened',
-    category: 'AI Implementation',
-    readTime: 8,
-    date: 'Mar 2026',
-    href: '/blog',
-  },
-  {
-    title: 'On-Premise AI for Government: What Actually Matters',
-    category: 'Industry Guide',
-    readTime: 6,
-    date: 'Mar 2026',
-    href: '/blog',
-  },
-]
+import { getHome } from '@/content/home'
+import { localeHref, type Locale } from '@/lib/i18n'
 
-function WhitepaperGate() {
+function WhitepaperGate({ locale }: { locale: Locale }) {
+  const f = getHome(locale).knowledgePreview.form
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
   const [submitted, setSubmitted] = useState(false)
@@ -48,8 +27,8 @@ function WhitepaperGate() {
         <div className="w-12 h-12 rounded-full bg-electric-blue/10 flex items-center justify-center">
           <span className="text-electric-blue text-2xl">&#10003;</span>
         </div>
-        <p className="text-text-primary font-semibold">Guide sent to your inbox</p>
-        <p className="text-text-secondary text-sm">Check your email for the RAG Architecture Guide.</p>
+        <p className="text-text-primary font-semibold">{f.successTitle}</p>
+        <p className="text-text-secondary text-sm">{f.successBody}</p>
       </div>
     )
   }
@@ -58,7 +37,7 @@ function WhitepaperGate() {
     <form onSubmit={handleSubmit} className="flex flex-col gap-3">
       <input
         type="text"
-        placeholder="Your name"
+        placeholder={f.namePlaceholder}
         value={name}
         onChange={(e) => setName(e.target.value)}
         required
@@ -66,7 +45,7 @@ function WhitepaperGate() {
       />
       <input
         type="email"
-        placeholder="Work email"
+        placeholder={f.emailPlaceholder}
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         required
@@ -78,14 +57,16 @@ function WhitepaperGate() {
         className="px-6 py-3 rounded-lg bg-electric-blue text-white text-sm font-semibold hover:bg-electric-blue/90 transition-colors disabled:opacity-70"
         style={{ fontFamily: 'var(--font-display)' }}
       >
-        {loading ? 'Sending...' : 'Download Free \u2192'}
+        {loading ? f.submitting : f.submit}
       </button>
-      <p className="text-[11px] text-text-secondary text-center">No spam. One email with your guide.</p>
+      <p className="text-[11px] text-text-secondary text-center">{f.note}</p>
     </form>
   )
 }
 
-export function KnowledgePreview() {
+export function KnowledgePreview({ locale = 'en' }: { locale?: Locale }) {
+  const c = getHome(locale).knowledgePreview
+  const placeholderPosts = c.posts
   return (
     <section className="relative py-24 px-6 lg:px-8" style={{ background: '#12100D' }}>
       {/* Grid overlay */}
@@ -106,10 +87,10 @@ export function KnowledgePreview() {
           transition={{ duration: 0.8, ease: 'easeOut' }}
         >
           <p className="text-electric-blue text-[11px] tracking-[3px] uppercase mb-4" style={{ fontFamily: 'var(--font-mono)' }}>
-            Knowledge Hub
+            {c.eyebrow}
           </p>
           <h2 className="text-4xl font-bold text-text-primary" style={{ fontFamily: 'var(--font-display)' }}>
-            How we think. What we have learned.
+            {c.heading}
           </h2>
         </motion.div>
 
@@ -125,7 +106,7 @@ export function KnowledgePreview() {
                 transition={{ duration: 0.75, ease: 'easeOut', delay: i * 0.12 }}
               >
                 <Link
-                  href={post.href}
+                  href={localeHref(locale, post.href)}
                   className="flex flex-col gap-3 p-5 rounded-xl border border-space-border hover:border-electric-blue/40 transition-all group"
                   style={{ background: '#171411' }}
                 >
@@ -137,7 +118,7 @@ export function KnowledgePreview() {
                       {post.category}
                     </span>
                     <span className="text-text-secondary text-[11px]" style={{ fontFamily: 'var(--font-mono)' }}>
-                      {post.readTime} min read &middot; {post.date}
+                      {c.readTime(post.readMinutes)} &middot; {post.date}
                     </span>
                   </div>
                   <h3
@@ -150,10 +131,10 @@ export function KnowledgePreview() {
               </motion.div>
             ))}
             <Link
-              href="/blog"
+              href={localeHref(locale, '/blog')}
               className="text-sm text-text-secondary hover:text-electric-blue transition-colors mt-2"
             >
-              View all articles &rarr;
+              {c.viewAll}
             </Link>
           </div>
 
@@ -170,19 +151,18 @@ export function KnowledgePreview() {
               className="text-electric-blue text-[10px] tracking-[2px] uppercase mb-3"
               style={{ fontFamily: 'var(--font-mono)' }}
             >
-              Free Guide
+              {c.guide.eyebrow}
             </p>
             <h3
               className="text-text-primary font-semibold text-base mb-2 leading-snug"
               style={{ fontFamily: 'var(--font-display)' }}
             >
-              Enterprise RAG Architecture Guide &mdash; On-Premise Deployment
+              {c.guide.title}
             </h3>
             <p className="text-text-secondary text-sm mb-6 leading-relaxed">
-              How to build a production-grade RAG system using PostgreSQL, pgvector,
-              ParadeDB and Apache AGE &mdash; without proprietary vector databases.
+              {c.guide.body}
             </p>
-            <WhitepaperGate />
+            <WhitepaperGate locale={locale} />
           </motion.div>
         </div>
       </div>

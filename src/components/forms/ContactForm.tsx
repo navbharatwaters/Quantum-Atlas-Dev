@@ -3,25 +3,30 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { getContact } from '@/content/contact'
+import type { Locale } from '@/lib/i18n'
 
-const schema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  company: z.string().min(1, 'Company name required'),
-  email: z.string().email('Valid email required'),
-  phone: z.string().optional(),
-  service: z.string().min(1, 'Please select a service'),
-  message: z.string().min(20, 'Please describe your challenge (min 20 characters)'),
-})
+function makeSchema(v: ReturnType<typeof getContact>['form']['validation']) {
+  return z.object({
+    name: z.string().min(2, v.name),
+    company: z.string().min(1, v.company),
+    email: z.string().email(v.email),
+    phone: z.string().optional(),
+    service: z.string().min(1, v.service),
+    message: z.string().min(20, v.message),
+  })
+}
 
-type FormData = z.infer<typeof schema>
+type FormData = z.infer<ReturnType<typeof makeSchema>>
 
-export function ContactForm() {
+export function ContactForm({ locale = 'en' }: { locale?: Locale }) {
+  const t = getContact(locale).form
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(makeSchema(t.validation)),
   })
 
   async function onSubmit(data: FormData) {
@@ -31,12 +36,12 @@ export function ContactForm() {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, locale }),
       })
       if (!res.ok) throw new Error('Submission failed')
       setSubmitted(true)
     } catch {
-      setError('Something went wrong. Please email us directly at contact@quantumatlas.dev')
+      setError(t.errorGeneric)
     } finally {
       setSubmitting(false)
     }
@@ -52,10 +57,10 @@ export function ContactForm() {
           ✓
         </div>
         <h3 className="text-text-primary text-xl font-semibold" style={{ fontFamily: 'var(--font-display)' }}>
-          Request received
+          {t.successTitle}
         </h3>
         <p className="text-text-secondary text-sm">
-          We will be in touch within 24 hours to schedule your call.
+          {t.successBody}
         </p>
       </div>
     )
@@ -69,49 +74,45 @@ export function ContactForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className={labelClass}>Name</label>
-          <input {...register('name')} placeholder="Your name" className={inputClass} />
+          <label className={labelClass}>{t.name}</label>
+          <input {...register('name')} placeholder={t.namePlaceholder} className={inputClass} />
           {errors.name && <p className={errorClass}>{errors.name.message}</p>}
         </div>
         <div>
-          <label className={labelClass}>Company</label>
-          <input {...register('company')} placeholder="Company name" className={inputClass} />
+          <label className={labelClass}>{t.company}</label>
+          <input {...register('company')} placeholder={t.companyPlaceholder} className={inputClass} />
           {errors.company && <p className={errorClass}>{errors.company.message}</p>}
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className={labelClass}>Work Email</label>
-          <input {...register('email')} type="email" placeholder="you@company.com" className={inputClass} />
+          <label className={labelClass}>{t.email}</label>
+          <input {...register('email')} type="email" placeholder={t.emailPlaceholder} className={inputClass} />
           {errors.email && <p className={errorClass}>{errors.email.message}</p>}
         </div>
         <div>
-          <label className={labelClass}>Phone (optional)</label>
-          <input {...register('phone')} placeholder="+91..." className={inputClass} />
+          <label className={labelClass}>{t.phone}</label>
+          <input {...register('phone')} placeholder={t.phonePlaceholder} className={inputClass} />
         </div>
       </div>
 
       <div>
-        <label className={labelClass}>Service Interested In</label>
+        <label className={labelClass}>{t.service}</label>
         <select {...register('service')} className={inputClass} defaultValue="">
-          <option value="" disabled>Select a service...</option>
-          <option value="voice-ai">AI Voice Agents</option>
-          <option value="idp">Document Intelligence</option>
-          <option value="rag">Enterprise RAG</option>
-          <option value="saas">Custom SaaS Development</option>
-          <option value="automation">AI Automation</option>
-          <option value="content">Content &amp; Video</option>
-          <option value="unsure">Not sure — tell us more</option>
+          <option value="" disabled>{t.servicePlaceholder}</option>
+          {t.services.map((o) => (
+            <option key={o.value} value={o.value}>{o.label}</option>
+          ))}
         </select>
         {errors.service && <p className={errorClass}>{errors.service.message}</p>}
       </div>
 
       <div>
-        <label className={labelClass}>Describe Your Challenge</label>
+        <label className={labelClass}>{t.message}</label>
         <textarea
           {...register('message')}
-          placeholder="What problem are you trying to solve? What have you tried so far?"
+          placeholder={t.messagePlaceholder}
           rows={4}
           className={`${inputClass} resize-none`}
         />
@@ -128,11 +129,11 @@ export function ContactForm() {
         className="w-full px-6 py-4 rounded-lg bg-electric-blue text-white font-semibold hover:brightness-110 transition-all disabled:opacity-70 text-sm"
         style={{ fontFamily: 'var(--font-display)' }}
       >
-        {submitting ? 'Submitting...' : 'Request a Discovery Call'}
+        {submitting ? t.submitting : t.submit}
       </button>
 
       <p className="text-text-secondary text-xs text-center">
-        We respond within 24 hours. No spam. No obligation.
+        {t.footnote}
       </p>
     </form>
   )

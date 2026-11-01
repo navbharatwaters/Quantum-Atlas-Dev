@@ -1,23 +1,17 @@
 'use client'
 
-const proofPoints = [
-  '4 months production · Voice AI',
-  'Government RAG deployment · Active',
-  '1000+ corporate clients',
-  '$0.08 per page · Document processing',
-  'Self-hosted · Zero vendor lock-in',
-  'On-premise deployment · Government-ready',
-  '40+ years industry presence',
-]
+import { getHome } from '@/content/home'
+import type { Locale } from '@/lib/i18n'
 
-export function ProofBar() {
-  const items = [...proofPoints, ...proofPoints]
+export function ProofBar({ locale = 'en' }: { locale?: Locale }) {
+  const c = getHome(locale).proofBar
+  const items = [...c.points, ...c.points]
 
   return (
     <div
       className="w-full overflow-hidden border-t border-b border-space-border py-5"
       style={{ background: '#12100D' }}
-      aria-label="Proof points"
+      aria-label={c.ariaLabel}
     >
       <div
         className="flex items-center gap-12 whitespace-nowrap"

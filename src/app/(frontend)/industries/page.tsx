@@ -1,29 +1,23 @@
 import type { Metadata } from 'next'
 import { PageHero } from '@/components/shared/PageHero'
 import { ContentCard } from '@/components/shared/ContentCard'
+import { pageAlternates } from '@/lib/i18n'
+import { getIndustries } from '@/content/industries'
 
 export const metadata: Metadata = {
   title: 'Industries',
   description: 'AI solutions for government, logistics, fintech, legal, manufacturing, healthcare, and real estate.',
+  alternates: pageAlternates('en', '/industries'),
 }
 
-const industries = [
-  { name: 'Government', slug: 'government', headline: "AI that passes the CISO's checklist" },
-  { name: 'Logistics & Shipping', slug: 'logistics-shipping', headline: 'Documents processed before the cargo lands' },
-  { name: 'Fintech & BFSI', slug: 'fintech-bfsi', headline: 'KYC in seconds. Compliance maintained.' },
-  { name: 'Legal', slug: 'legal', headline: '500 contracts reviewed before the weekend' },
-  { name: 'Manufacturing', slug: 'manufacturing', headline: 'From PO to production floor without the handoffs' },
-  { name: 'Healthcare', slug: 'healthcare', headline: 'Clinical decisions supported by accurate document processing' },
-  { name: 'Real Estate', slug: 'real-estate', headline: 'Property documents processed before the signing date' },
-]
-
 export default function IndustriesPage() {
+  const { index } = getIndustries('en')
   return (
     <div className="bg-space-dark min-h-screen">
-      <PageHero eyebrow="Industries" heading="Deep vertical expertise. Not generic AI." />
+      <PageHero eyebrow={index.eyebrow} heading={index.heading} />
       <section className="py-16 px-6 lg:px-8">
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-          {industries.map((ind) => (
+          {index.items.map((ind) => (
             <ContentCard
               key={ind.slug}
               href={`/industries/${ind.slug}`}

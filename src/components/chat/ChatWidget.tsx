@@ -16,24 +16,23 @@ import {
   type RemoteParticipant,
   type RemoteTrack,
 } from 'livekit-client'
+import { getUi, type Locale } from '@/lib/i18n'
 
 interface Message {
   role: 'user' | 'assistant'
   text: string
 }
 
-const GREETING: Message = {
-  role: 'assistant',
-  text: "Hi — I'm the Quantum Atlas assistant. I can answer questions about our AI services and how we've deployed systems in production. What are you working on?",
-}
-
 type ChatMode = 'text' | 'voice'
 type VoiceStatus = 'idle' | 'connecting' | 'connected' | 'error'
 
-export function ChatWidget() {
+export function ChatWidget({ locale = 'en' }: { locale?: Locale }) {
+  const t = getUi(locale).chat
+  // Voice agent speaks English only: no voice entry points on Russian pages
+  const voiceEnabled = locale !== 'ru'
   const [open, setOpen] = useState(false)
   const [mode, setMode] = useState<ChatMode>('text')
-  const [messages, setMessages] = useState<Message[]>([GREETING])
+  const [messages, setMessages] = useState<Message[]>([{ role: 'assistant', text: t.greeting }])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [voiceStatus, setVoiceStatus] = useState<VoiceStatus>('idle')
@@ -45,10 +44,11 @@ export function ChatWidget() {
 
   // Hero "Talk to our voice agent" button dispatches this event
   useEffect(() => {
+    if (!voiceEnabled) return
     function handleOpenVoice() { setOpen(true) }
     window.addEventListener('qa:open-voice', handleOpenVoice)
     return () => window.removeEventListener('qa:open-voice', handleOpenVoice)
-  }, [])
+  }, [voiceEnabled])
 
   useEffect(() => {
     if (open) bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -81,7 +81,7 @@ export function ChatWidget() {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, history }),
+        body: JSON.stringify({ message: text, history, locale }),
       })
       const data = await res.json()
       if (!res.ok) {
@@ -91,7 +91,7 @@ export function ChatWidget() {
             role: 'assistant',
             text:
               data.error ||
-              'Something went wrong. Please try again or email contact@quantumatlas.dev.',
+              t.errorGeneric,
           },
         ])
         return
@@ -100,13 +100,13 @@ export function ChatWidget() {
         ...prev,
         {
           role: 'assistant',
-          text: data.reply ?? 'Sorry, something went wrong. Please try again.',
+          text: data.reply ?? t.errorFallback,
         },
       ])
     } catch {
       setMessages((prev) => [
         ...prev,
-        { role: 'assistant', text: 'Connection error. Please try again.' },
+        { role: 'assistant', text: t.errorConnection },
       ])
     } finally {
       setLoading(false)
@@ -223,21 +223,23 @@ export function ChatWidget() {
                 <span className="text-text-primary text-sm font-semibold" style={{ fontFamily: 'var(--font-display)' }}>
                   Quantum Atlas
                 </span>
-                <span className="text-text-secondary text-xs">· AI Assistant</span>
+                <span className="text-text-secondary text-xs">{t.assistantSuffix}</span>
               </div>
               <div className="flex items-center gap-2">
-                {/* Mode toggle */}
-                <button
-                  onClick={() => mode === 'text' ? (setMode('voice'), connectVoice()) : switchToText()}
-                  className="text-text-secondary hover:text-text-primary transition-colors"
-                  title={mode === 'text' ? 'Switch to voice' : 'Switch to text'}
-                >
-                  {mode === 'voice' ? <MicOff size={15} /> : <Mic size={15} />}
-                </button>
+                {/* Mode toggle (voice is English-only for now) */}
+                {voiceEnabled && (
+                  <button
+                    onClick={() => mode === 'text' ? (setMode('voice'), connectVoice()) : switchToText()}
+                    className="text-text-secondary hover:text-text-primary transition-colors"
+                    title={mode === 'text' ? t.switchToVoice : t.switchToText}
+                  >
+                    {mode === 'voice' ? <MicOff size={15} /> : <Mic size={15} />}
+                  </button>
+                )}
                 <button
                   onClick={() => setOpen(false)}
                   className="text-text-secondary hover:text-text-primary transition-colors"
-                  aria-label="Close chat"
+                  aria-label={t.closeChat}
                 >
                   <X size={16} />
                 </button>
@@ -301,7 +303,7 @@ export function ChatWidget() {
                         style={{ background: '#0C0A08' }}
                       >
                         <Loader2 size={14} className="text-text-secondary animate-spin" />
-                        <span className="text-text-secondary text-xs">Thinking…</span>
+                        <span className="text-text-secondary text-xs">{t.thinking}</span>
                       </div>
                     </div>
                   )}
@@ -316,40 +318,47 @@ export function ChatWidget() {
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
                       onKeyDown={handleKey}
-                      placeholder="Ask about our services…"
+                      placeholder={t.placeholder}
                       rows={1}
                       disabled={loading}
                       className="flex-1 resize-none bg-transparent text-text-primary text-sm placeholder:text-text-secondary/50 focus:outline-none leading-relaxed py-1 max-h-24 overflow-y-auto"
                       style={{ fontFamily: 'var(--font-body)' }}
                     />
-                    <button
-                      onClick={() => { setMode('voice'); connectVoice() }}
-                      disabled={loading}
-                      className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center border transition-all hover:brightness-125 disabled:opacity-40"
-                      style={{ borderColor: '#FFBF00', background: 'rgba(255,191,0,0.10)' }}
-                      aria-label="Talk to our voice assistant"
-                      title="Talk to our voice assistant"
-                    >
-                      <Mic size={15} className="text-electric-blue" />
-                    </button>
+                    {voiceEnabled && (
+                      <button
+                        onClick={() => { setMode('voice'); connectVoice() }}
+                        disabled={loading}
+                        className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center border transition-all hover:brightness-125 disabled:opacity-40"
+                        style={{ borderColor: '#FFBF00', background: 'rgba(255,191,0,0.10)' }}
+                        aria-label={t.talkAria}
+                        title={t.talkAria}
+                      >
+                        <Mic size={15} className="text-electric-blue" />
+                      </button>
+                    )}
                     <button
                       onClick={send}
                       disabled={!input.trim() || loading}
                       className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-all disabled:opacity-40 hover:brightness-110"
                       style={{ background: '#FFBF00' }}
-                      aria-label="Send"
+                      aria-label={t.send}
                     >
                       <Send size={14} className="text-space-black" />
                     </button>
                   </div>
                   <p className="text-text-secondary/60 text-[10px] mt-2 text-center" style={{ fontFamily: 'var(--font-mono)' }}>
-                    Enter to send · Shift+Enter for new line ·{' '}
-                    <button
-                      onClick={() => { setMode('voice'); connectVoice() }}
-                      className="underline text-electric-blue hover:brightness-125"
-                    >
-                      Talk to voice assistant
-                    </button>
+                    {t.hint}
+                    {voiceEnabled && (
+                      <>
+                        {' '}
+                        <button
+                          onClick={() => { setMode('voice'); connectVoice() }}
+                          className="underline text-electric-blue hover:brightness-125"
+                        >
+                          {t.talkLink}
+                        </button>
+                      </>
+                    )}
                   </p>
                 </div>
               </>
@@ -359,7 +368,7 @@ export function ChatWidget() {
                 {voiceStatus === 'connecting' && (
                   <>
                     <Loader2 size={32} className="text-quantum-green animate-spin" />
-                    <p className="text-text-secondary text-sm text-center">Connecting to voice assistant…</p>
+                    <p className="text-text-secondary text-sm text-center">{t.voiceConnecting}</p>
                   </>
                 )}
 
@@ -377,7 +386,7 @@ export function ChatWidget() {
                       />
                     </div>
                     <p className="text-text-primary text-sm font-medium">
-                      {agentSpeaking ? 'Agent speaking…' : micMuted ? 'Microphone muted' : 'Speak now…'}
+                      {agentSpeaking ? t.agentSpeaking : micMuted ? t.micMuted : t.speakNow}
                     </p>
 
                     <div className="flex items-center gap-4">
@@ -385,7 +394,7 @@ export function ChatWidget() {
                         onClick={toggleMute}
                         className="w-12 h-12 rounded-full border border-space-border flex items-center justify-center transition-all hover:brightness-110"
                         style={{ background: micMuted ? '#2E261F' : '#FFBF00' }}
-                        title={micMuted ? 'Unmute' : 'Mute'}
+                        title={micMuted ? t.unmute : t.mute}
                       >
                         {micMuted
                           ? <MicOff size={18} className="text-text-secondary" />
@@ -396,42 +405,42 @@ export function ChatWidget() {
                         onClick={disconnectVoice}
                         className="w-12 h-12 rounded-full flex items-center justify-center transition-all hover:brightness-110"
                         style={{ background: '#7f1d1d' }}
-                        title="End call"
+                        title={t.endCall}
                       >
                         <PhoneOff size={18} className="text-red-300" />
                       </button>
                     </div>
                     <button onClick={switchToText} className="text-text-secondary/50 text-xs hover:text-text-secondary transition-colors">
-                      Switch to text chat
+                      {t.switchToTextChat}
                     </button>
                   </>
                 )}
 
                 {voiceStatus === 'error' && (
                   <>
-                    <p className="text-red-400 text-sm text-center">Could not connect to voice assistant.</p>
+                    <p className="text-red-400 text-sm text-center">{t.voiceError}</p>
                     <button
                       onClick={connectVoice}
                       className="px-4 py-2 rounded-lg text-sm text-space-black font-medium"
                       style={{ background: '#FFBF00' }}
                     >
-                      Try again
+                      {t.tryAgain}
                     </button>
                     <button onClick={switchToText} className="text-text-secondary/50 text-xs hover:text-text-secondary transition-colors">
-                      Use text chat instead
+                      {t.useTextInstead}
                     </button>
                   </>
                 )}
 
                 {voiceStatus === 'idle' && (
                   <>
-                    <p className="text-text-secondary text-sm text-center">Voice assistant ready</p>
+                    <p className="text-text-secondary text-sm text-center">{t.voiceReady}</p>
                     <button
                       onClick={connectVoice}
                       className="px-4 py-2 rounded-lg text-sm text-space-black font-medium"
                       style={{ background: '#FFBF00' }}
                     >
-                      Start voice chat
+                      {t.startVoice}
                     </button>
                   </>
                 )}
@@ -447,7 +456,7 @@ export function ChatWidget() {
         className="fixed bottom-5 right-5 z-50 w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all hover:brightness-110 hover:scale-105"
         style={{ background: '#FFBF00' }}
         whileTap={{ scale: 0.95 }}
-        aria-label="Open chat"
+        aria-label={t.openChat}
       >
         {open
           ? <X size={22} style={{ color: '#0C0A08' }} />

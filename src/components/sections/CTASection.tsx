@@ -1,8 +1,11 @@
 'use client'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { getHome } from '@/content/home'
+import { localeHref, type Locale } from '@/lib/i18n'
 
-export function CTASection() {
+export function CTASection({ locale = 'en' }: { locale?: Locale }) {
+  const c = getHome(locale).cta
   return (
     <section
       className="py-32 px-6 lg:px-8 text-center relative"
@@ -31,26 +34,25 @@ export function CTASection() {
             className="text-4xl lg:text-5xl font-bold text-text-primary mb-6 leading-[1.1]"
             style={{ fontFamily: 'var(--font-display)' }}
           >
-            Ready to build something<br />that actually works?
+            {c.heading[0]}<br />{c.heading[1]}
           </h2>
           <p className="text-text-secondary text-lg mb-10 leading-relaxed">
-            Not a demo. Not a PoC. A production system.
-            Let us show you what we have running today.
+            {c.body}
           </p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <Link
-              href="/contact"
+              href={localeHref(locale, '/contact')}
               className="px-8 py-4 rounded-lg bg-electric-blue text-white font-semibold hover:brightness-110 hover:scale-[1.02] transition-all text-base"
               style={{ fontFamily: 'var(--font-display)' }}
             >
-              Book a Discovery Call
+              {c.primary}
             </Link>
             <Link
-              href="/services"
+              href={localeHref(locale, '/services')}
               className="px-8 py-4 rounded-lg border border-space-border text-text-secondary hover:border-electric-blue hover:text-text-primary transition-all text-base font-medium"
               style={{ fontFamily: 'var(--font-display)' }}
             >
-              See All Services
+              {c.secondary}
             </Link>
           </div>
         </motion.div>

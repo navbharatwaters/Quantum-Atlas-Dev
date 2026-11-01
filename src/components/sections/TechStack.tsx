@@ -1,42 +1,12 @@
 'use client'
 import { motion } from 'framer-motion'
 
-const rows = [
-  {
-    label: 'Infrastructure',
-    items: [
-      { name: 'LiveKit', note: 'Self-hosted WebRTC — no LiveKit Cloud dependency' },
-      { name: 'PostgreSQL', note: 'Single database for all data including vectors' },
-      { name: 'Docker', note: 'Containerized deployment — portable and reproducible' },
-      { name: 'Pulumi', note: 'Infrastructure as code — version-controlled infra' },
-      { name: 'Tailscale', note: 'Zero-trust internal networking — no open ports' },
-      { name: 'Caddy', note: 'Auto SSL — no nginx config complexity' },
-    ],
-  },
-  {
-    label: 'AI / ML',
-    items: [
-      { name: 'LangGraph', note: 'Stateful agent graphs — complex multi-step AI' },
-      { name: 'n8n', note: 'Self-hosted workflow automation — no Zapier dependency' },
-      { name: 'LiteLLM', note: 'Multi-provider LLM routing with cost controls' },
-      { name: 'Langfuse', note: 'Full observability — every query logged and traced' },
-      { name: 'Deepgram', note: 'STT/TTS — cost-effective, low-latency voice' },
-      { name: 'Jina v4', note: 'Asymmetric embeddings — optimized for RAG retrieval' },
-    ],
-  },
-  {
-    label: 'Data',
-    items: [
-      { name: 'pgvector', note: 'Vector search in Postgres — no Pinecone dependency' },
-      { name: 'ParadeDB', note: 'BM25 in Postgres — no Elasticsearch needed' },
-      { name: 'Apache AGE', note: 'Graph queries in Postgres — no Neo4j dependency' },
-      { name: 'Redis', note: 'Session caching and rate limiting' },
-      { name: 'MinIO', note: 'S3-compatible object storage — self-hosted' },
-    ],
-  },
-]
+import { getHome } from '@/content/home'
+import type { Locale } from '@/lib/i18n'
 
-export function TechStack() {
+export function TechStack({ locale = 'en' }: { locale?: Locale }) {
+  const c = getHome(locale).techStack
+  const rows = c.rows
   return (
     <section className="relative py-24 px-6 lg:px-8" style={{ background: '#0C0A08' }}>
       {/* Grid overlay */}
@@ -57,14 +27,13 @@ export function TechStack() {
           transition={{ duration: 0.8, ease: 'easeOut' }}
         >
           <p className="text-electric-blue text-[11px] tracking-[3px] uppercase mb-4" style={{ fontFamily: 'var(--font-mono)' }}>
-            The Stack
+            {c.eyebrow}
           </p>
           <h2 className="text-4xl font-bold text-text-primary mb-4" style={{ fontFamily: 'var(--font-display)' }}>
-            Self-hosted. Production-proven. No dependencies.
+            {c.heading}
           </h2>
           <p className="text-text-secondary max-w-xl mx-auto">
-            Every technology was chosen because it eliminates a vendor dependency
-            and runs reliably in production environments we control.
+            {c.intro}
           </p>
         </motion.div>
 

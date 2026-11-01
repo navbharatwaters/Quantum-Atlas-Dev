@@ -5,10 +5,16 @@ import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import Link from 'next/link'
 import { GlobeWrapper } from '@/components/globe/GlobeWrapper'
+import { localeHref, type Locale } from '@/lib/i18n'
+import { getHome } from '@/content/home'
 
 gsap.registerPlugin()
 
-export function Hero() {
+export function Hero({ locale = 'en' }: { locale?: Locale }) {
+  const c = getHome(locale).hero
+  const ru = locale === 'ru'
+  // Cyrillic words are wider than the Latin headline the layout was drawn for
+  const lineSize = ru ? 'text-[38px]' : 'text-[44px]'
   const heroRef = useRef<HTMLElement>(null)
   const eyebrowRef = useRef<HTMLDivElement>(null)
   const headlineRef = useRef<HTMLHeadingElement>(null)
@@ -65,29 +71,29 @@ export function Hero() {
             className="text-electric-blue uppercase tracking-[3px] text-[11px]"
             style={{ fontFamily: 'var(--font-mono)' }}
           >
-            Quantum Atlas · AI Infrastructure
+            {c.eyebrow}
           </span>
         </div>
 
         {/* Headline */}
         <h1 ref={headlineRef} className="mb-6 font-normal">
           <span
-            className="block text-[44px] font-bold leading-[1.08] text-text-primary"
+            className={`block ${lineSize} font-bold leading-[1.08] text-text-primary`}
             style={{ fontFamily: 'var(--font-display)', opacity: 0 }}
           >
-            Built in
+            {c.headline[0]}
           </span>
           <span
-            className="block text-[44px] font-bold leading-[1.08] text-text-primary"
+            className={`block ${lineSize} font-bold leading-[1.08] text-text-primary`}
             style={{ fontFamily: 'var(--font-display)', opacity: 0 }}
           >
-            Production.
+            {c.headline[1]}
           </span>
           <span
-            className="block text-[44px] font-bold leading-[1.08] text-electric-blue whitespace-nowrap"
+            className={`block ${lineSize} font-bold leading-[1.08] text-electric-blue${ru ? '' : ' whitespace-nowrap'}`}
             style={{ fontFamily: 'var(--font-display)', opacity: 0 }}
           >
-            Proven at Scale.
+            {c.headline[2]}
           </span>
         </h1>
 
@@ -97,27 +103,24 @@ export function Hero() {
           className="text-[15px] text-text-secondary leading-[1.72] mb-8"
           style={{ fontFamily: 'var(--font-body)', opacity: 0 }}
         >
-          AI systems that run in the real world —{' '}
-          voice agents, document intelligence,{' '}
-          knowledge systems and custom SaaS.{' '}
-          Self-hosted. Enterprise-grade.
+          {c.subtitle}
         </p>
 
         {/* CTAs */}
-        <div ref={ctasRef} className="flex items-center gap-3 mb-10">
+        <div ref={ctasRef} className={`flex items-center gap-3 mb-10${ru ? ' flex-wrap' : ''}`}>
           <Link
-            href="/contact"
+            href={localeHref(locale, '/contact')}
             className="px-[28px] py-[13px] rounded-[6px] bg-electric-blue text-space-black text-[14px] font-semibold hover:brightness-110 hover:scale-[1.02] transition-all shrink-0"
             style={{ fontFamily: 'var(--font-display)', opacity: 0 }}
           >
-            Book a Discovery Call
+            {c.ctaPrimary}
           </Link>
           <Link
-            href="/services"
+            href={localeHref(locale, '/services')}
             className="px-[28px] py-[13px] rounded-[6px] bg-transparent text-text-secondary border border-space-border text-[14px] font-semibold hover:border-electric-blue hover:text-text-primary transition-all shrink-0"
             style={{ fontFamily: 'var(--font-display)', opacity: 0 }}
           >
-            See Our Work →
+            {c.ctaSecondary}
           </Link>
         </div>
 
@@ -144,7 +147,7 @@ export function Hero() {
           fontFamily: 'var(--font-mono)',
         }}
       >
-        18.9667° N · 72.8333° E · MUMBAI
+        {c.coordinates}
       </div>
     </section>
   )

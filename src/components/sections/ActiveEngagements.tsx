@@ -1,31 +1,12 @@
 'use client'
 import { motion } from 'framer-motion'
 
-const engagements = [
-  {
-    sector: 'Government · Customs & Taxation',
-    service: 'Enterprise RAG',
-    status: 'Active Implementation',
-    outcome: '40+ senior government officers evaluating for large-scale IGST deployment',
-    color: '#FFBF00',
-  },
-  {
-    sector: 'Global Logistics · Fortune 500',
-    service: 'Document Intelligence',
-    status: 'Production Testing Complete',
-    outcome: 'Bulk document processing at enterprise scale — evaluated and approved',
-    color: '#FFBF00',
-  },
-  {
-    sector: 'Shipping & Logistics',
-    service: 'AI Voice Agents',
-    status: '4 months in production',
-    outcome: 'Inbound and outbound calls — native carrier SIP integration — $0.08/min',
-    color: '#FFBF00',
-  },
-]
+import { getHome } from '@/content/home'
+import type { Locale } from '@/lib/i18n'
 
-export function ActiveEngagements() {
+export function ActiveEngagements({ locale = 'en' }: { locale?: Locale }) {
+  const c = getHome(locale).activeEngagements
+  const engagements = c.items
   return (
     <section className="relative py-24 px-6 lg:px-8" style={{ background: '#12100D' }}>
       {/* Grid overlay */}
@@ -46,10 +27,10 @@ export function ActiveEngagements() {
           transition={{ duration: 0.8, ease: 'easeOut' }}
         >
           <p className="text-electric-blue text-[11px] tracking-[3px] uppercase mb-4" style={{ fontFamily: 'var(--font-mono)' }}>
-            Active Engagements
+            {c.eyebrow}
           </p>
           <h2 className="text-4xl font-bold text-text-primary" style={{ fontFamily: 'var(--font-display)' }}>
-            In production. Right now.
+            {c.heading}
           </h2>
         </motion.div>
 

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { SYSTEM_PROMPT } from '@/content/chat-assistant'
+import { SYSTEM_PROMPT_RU_ADDENDUM } from '@/content/chat-assistant.ru'
+import { RU_CONTACT } from '@/lib/contact'
 
 const OPENROUTER_BASE_URL =
   process.env.OPENROUTER_BASE_URL ?? 'https://openrouter.ai/api/v1'
@@ -26,10 +28,15 @@ function rateLimited(ip: string): boolean {
 
 export async function POST(req: NextRequest) {
   try {
+    // Parsed first so every reply (incl. setup/rate-limit messages) can be localised
+    const body = await req.json().catch(() => ({}))
+    const ru = body?.locale === 'ru'
     const apiKey = process.env.OPENROUTER_API_KEY
     if (!apiKey) {
       return NextResponse.json({
-        reply:
+        reply: ru
+          ? `Ассистент сейчас настраивается. Напишите на ${RU_CONTACT.email} или позвоните по номеру ${RU_CONTACT.phoneDisplay} (контактное лицо: ${RU_CONTACT.person}), и команда ответит вам лично.`
+          :
           'Our assistant is being set up. Please email contact@quantumatlas.dev, call +91 22 4353 1111 (Marketing and Sales: +91 79654 80571), or book a call at /contact and the team will answer you directly.',
       })
     }
@@ -38,12 +45,15 @@ export async function POST(req: NextRequest) {
       req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
     if (rateLimited(ip)) {
       return NextResponse.json(
-        { error: 'Too many messages. Please wait a few minutes and try again.' },
+        {
+          error: ru
+            ? 'Слишком много сообщений. Подождите несколько минут и попробуйте снова.'
+            : 'Too many messages. Please wait a few minutes and try again.',
+        },
         { status: 429 },
       )
     }
 
-    const body = await req.json()
     const message = (body.message as string | undefined)
       ?.slice(0, 1000)
       ?.trim()
@@ -56,7 +66,7 @@ export async function POST(req: NextRequest) {
       .slice(-6)
 
     const messages = [
-      { role: 'system', content: SYSTEM_PROMPT },
+      { role: 'system', content: ru ? SYSTEM_PROMPT + SYSTEM_PROMPT_RU_ADDENDUM : SYSTEM_PROMPT },
       ...history.map((m) => ({ role: m.role as string, content: m.text })),
       { role: 'user', content: message },
     ]
@@ -90,7 +100,7 @@ export async function POST(req: NextRequest) {
       .replace(/\s{2,}/g, ' ')
       .trim()
     return NextResponse.json({
-      reply: reply || 'Sorry, I could not generate an answer.',
+      reply: reply || (ru ? 'К сожалению, не удалось сформировать ответ.' : 'Sorry, I could not generate an answer.'),
     })
   } catch (e) {
     console.error('Chat API error:', e)

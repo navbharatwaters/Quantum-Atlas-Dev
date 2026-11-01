@@ -1,16 +1,12 @@
 'use client'
 import { motion } from 'framer-motion'
 
-const proofPoints = [
-  { value: '$0.08/min', label: 'Voice AI cost — 10x below market', color: '#FFBF00' },
-  { value: '$0.08/page', label: 'Document processing — 3.5x below Nanonets', color: '#FFBF00' },
-  { value: '4 months', label: 'Voice AI in production — Navbharat Shipping', color: '#FFBF00' },
-  { value: '1000+', label: 'Corporate clients — existing relationships', color: '#FFBF00' },
-  { value: 'ERP replaced', label: 'Custom-built iKargos platform from scratch', color: '#FFBF00' },
-  { value: '15 → 2', label: 'Staff reduction — internal automation proof', color: '#FFBF00' },
-]
+import { getHome } from '@/content/home'
+import type { Locale } from '@/lib/i18n'
 
-export function WhyDifferent() {
+export function WhyDifferent({ locale = 'en' }: { locale?: Locale }) {
+  const c = getHome(locale).whyDifferent
+  const proofPoints = c.points.map((p) => ({ ...p, color: '#FFBF00' }))
   return (
     <section
       className="relative py-24 px-6 lg:px-8"
@@ -34,7 +30,7 @@ export function WhyDifferent() {
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
         >
-          Why Quantum Atlas
+          {c.eyebrow}
         </motion.p>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
@@ -49,11 +45,10 @@ export function WhyDifferent() {
               className="text-4xl lg:text-5xl font-bold text-text-primary leading-[1.1] mb-6"
               style={{ fontFamily: 'var(--font-display)' }}
             >
-              Production proof.<br />Not promises.
+              {c.heading[0]}<br />{c.heading[1]}
             </h2>
             <p className="text-text-secondary text-lg leading-relaxed">
-              Every system we offer has been running in production
-              in our own companies. We are our own most demanding client.
+              {c.body}
             </p>
           </motion.div>
 
