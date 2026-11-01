@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import nodemailer from 'nodemailer'
+import { escapeHtml } from '@/lib/escapeHtml'
 
 const schema = z.object({
   name: z.string().min(2),
@@ -88,49 +89,28 @@ export async function POST(req: NextRequest) {
       await transporter.sendMail({
         from: `"Quantum Atlas Website" <${process.env.SMTP_USER}>`,
         to: toEmail,
-        replyTo: `"${data.name}" <${data.email}>`,
+        replyTo: { name: data.name, address: data.email },
         subject: t.subject(data.name, data.company, serviceLabel),
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px;">
             <h2 style="color: #FFBF00; margin-top: 0;">${t.title}</h2>
             <table style="width: 100%; border-collapse: collapse;">
-              <tr><td style="padding: 8px 0; color: #888; width: 140px;">${t.name}</td><td style="padding: 8px 0; font-weight: bold;">${data.name}</td></tr>
-              <tr><td style="padding: 8px 0; color: #888;">${t.company}</td><td style="padding: 8px 0; font-weight: bold;">${data.company}</td></tr>
-              <tr><td style="padding: 8px 0; color: #888;">${t.email}</td><td style="padding: 8px 0;"><a href="mailto:${data.email}" style="color: #FFBF00;">${data.email}</a></td></tr>
-              <tr><td style="padding: 8px 0; color: #888;">${t.phone}</td><td style="padding: 8px 0;">${data.phone ?? '—'}</td></tr>
-              <tr><td style="padding: 8px 0; color: #888;">${t.service}</td><td style="padding: 8px 0;">${serviceLabel}</td></tr>
+              <tr><td style="padding: 8px 0; color: #888; width: 140px;">${t.name}</td><td style="padding: 8px 0; font-weight: bold;">${escapeHtml(data.name)}</td></tr>
+              <tr><td style="padding: 8px 0; color: #888;">${t.company}</td><td style="padding: 8px 0; font-weight: bold;">${escapeHtml(data.company)}</td></tr>
+              <tr><td style="padding: 8px 0; color: #888;">${t.email}</td><td style="padding: 8px 0;"><a href="mailto:${escapeHtml(data.email)}" style="color: #FFBF00;">${escapeHtml(data.email)}</a></td></tr>
+              <tr><td style="padding: 8px 0; color: #888;">${t.phone}</td><td style="padding: 8px 0;">${data.phone ? escapeHtml(data.phone) : '—'}</td></tr>
+              <tr><td style="padding: 8px 0; color: #888;">${t.service}</td><td style="padding: 8px 0;">${escapeHtml(serviceLabel)}</td></tr>
             </table>
             <hr style="border: none; border-top: 1px solid #333; margin: 16px 0;" />
             <p style="color: #888; margin-bottom: 4px;">${t.message}</p>
-            <p style="background: #f5f5f5; padding: 16px; border-radius: 6px; white-space: pre-wrap;">${data.message}</p>
-            <p style="color: #aaa; font-size: 12px; margin-top: 24px;">${t.footer(data.name)}</p>
+            <p style="background: #f5f5f5; padding: 16px; border-radius: 6px; white-space: pre-wrap;">${escapeHtml(data.message)}</p>
+            <p style="color: #aaa; font-size: 12px; margin-top: 24px;">${escapeHtml(t.footer(data.name))}</p>
           </div>
         `,
         text: `${t.title}\n\n${t.name}: ${data.name}\n${t.company}: ${data.company}\n${t.email}: ${data.email}\n${t.phone}: ${data.phone ?? '—'}\n${t.service}: ${serviceLabel}\n\n${t.message}:\n${data.message}`,
       })
     } else {
       console.warn('SMTP credentials not set — email not sent')
-    }
-
-    // Also save to Payload CMS if available
-    try {
-      const payloadRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/inquiries`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'discovery-call',
-          name: data.name,
-          email: data.email,
-          company: data.company,
-          phone: data.phone,
-          service: data.service,
-          message: data.message,
-          source: data.locale === 'ru' ? '/ru/contact' : '/contact',
-        }),
-      })
-      if (!payloadRes.ok) console.error('Payload save failed:', await payloadRes.text())
-    } catch (e) {
-      console.error('Payload unavailable:', e)
     }
 
     return NextResponse.json({ success: true })
